@@ -9,8 +9,8 @@ doc/html/.doctrees
 log/**/*.log
 log/**/*.txt
 
-bmp2nam*
-bmp2nam-test*
+/bmp2nam*
+/bmp2nam-test*
 
 test/_test.c
 
