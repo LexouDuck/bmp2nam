@@ -1,0 +1,4 @@
+[submodule "lib/libccc"]
+	path = lib/libccc
+	url = git@github.com:LexouDuck/libccc.git
+	branch = dev
