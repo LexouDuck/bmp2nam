@@ -32,6 +32,13 @@ OBJS = ${SRCS:%.c=$(OBJDIR)%.o}
 #! Derive list of dependency files (.d) from list of srcs
 DEPS = ${OBJS:.o=.d}
 
+#! List of libraries to link against
+LIBS = $(foreach i,$(PACKAGES_LINK),$($(i)))
+
+#! List of folders which store header code files
+INCLUDE_DIRS = -I$(HDRDIR) \
+	$(foreach i,$(PACKAGES_INCLUDE),-I$($(i)))
+
 
 
 .PHONY:\
@@ -46,7 +53,7 @@ update-lists-build:
 $(OBJDIR)%.o : $(SRCDIR)%.c
 	@mkdir -p $(@D)
 	@printf "Compiling file: "$@" -> "
-	@$(CC) -o $@ $(CFLAGS) -MMD -I$(HDRDIR) -c $<
+	@$(CC) -o $@ $(CFLAGS) $(INCLUDE_DIRS) -MMD -c $<
 	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
 
 
@@ -54,8 +61,8 @@ $(OBJDIR)%.o : $(SRCDIR)%.c
 #! Compiles the project executable
 $(NAME): $(OBJS)
 	@printf "Compiling program: "$(NAME)" -> "
-	@$(CC) $(CFLAGS) -o $@ $^ $(INCLUDE_DIRS) $(LIBS)
-	@printf $(GREEN)"OK!"$(RESET)"\n"
+	@$(CC) -o $@ $(CFLAGS) $(INCLUDE_DIRS) $^ $(LIBS)
+	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
 
 
 

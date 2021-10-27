@@ -71,6 +71,7 @@ include make/utils/ext.mk
 # project-specific rules
 include make/config/modes.mk
 include make/config/build.mk
+include make/config/packages.mk
 
 
 
@@ -86,13 +87,13 @@ all: $(MODE)
 debug # Builds the library, in 'debug' mode (with debug flags and symbol-info)
 debug: MODE = debug
 debug: CFLAGS += $(CFLAGS_DEBUG)
-debug: packages $(NAME)
+debug: $(NAME)
 
 .PHONY:\
 release # Builds the library, in 'release' mode (with debug flags and symbol-info)
 release: MODE = release
 release: CFLAGS += $(CFLAGS_RELEASE)
-release: packages $(NAME)
+release: $(NAME)
 
 
 
@@ -116,7 +117,6 @@ include make/rules/install-program.mk
 include make/rules/init.mk
 include make/rules/prereq.mk
 include make/rules/clean.mk
-include make/rules/update.mk
 include make/rules/version.mk
 include make/rules/packages.mk
 include make/rules/dist.mk
