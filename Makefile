@@ -66,7 +66,7 @@ SRCSFILE = make/lists/srcs.txt
 # general variables
 include make/utils/ansi.mk
 include make/utils/sudo.mk
-include make/utils/exe.mk
+include make/utils/ext.mk
 
 # project-specific rules
 include make/config/modes.mk
@@ -124,3 +124,6 @@ include make/rules/dist.mk
 include make/rules/lint.mk
 include make/rules/format.mk
 include make/rules/debugging.mk
+
+include make/packages/libccc.mk
+include make/packages/SDL2.mk
