@@ -2,24 +2,6 @@
 
 
 
-define update_list_hdrs
-	find $(HDRDIR) -name "*.h" | sort | sed "s|$(HDRDIR)/||g" > $(HDRSFILE)
-endef
-ifeq ($(shell test -f $(HDRSFILE) && echo _),)
-$(warning NOTE: header list file "$(HDRSFILE)" doesn't exist, creating it...)
-$(shell $(call update_list_hdrs))
-endif
-
-define update_list_srcs
-	find $(SRCDIR) -name "*.c" | sort | sed "s|$(SRCDIR)/||g" > $(SRCSFILE)
-endef
-ifeq ($(shell test -f $(SRCSFILE) && echo _),)
-$(warning NOTE: source list file "$(SRCSFILE)" doesn't exist, creating it...)
-$(shell $(call update_list_srcs))
-endif
-
-
-
 #! List of all C header code files
 HDRS := $(shell cat $(HDRSFILE))
 
@@ -36,16 +18,29 @@ DEPS = ${OBJS:.o=.d}
 LDLIBS = $(foreach i,$(PACKAGES_LINK),$($(i)))
 
 #! List of folders which store header code files
-INCLUDE_DIRS = -I$(HDRDIR) \
-	$(foreach i,$(PACKAGES_INCLUDE),-I$($(i)))
+INCLUDES = -I$(HDRDIR) $(foreach i,$(PACKAGES_INCLUDE),-I$($(i)))
 
 
 
 .PHONY:\
-update-lists-build # Create/update the list of source/header files
-update-lists-build:
-	@$(call update_list_hdrs)
-	@$(call update_list_srcs)
+lists # Create/update the list of source/header files
+lists:
+	@find $(HDRDIR) -name "*.h" | sort | sed "s|$(HDRDIR)/||g" > $(HDRSFILE)
+	@find $(SRCDIR) -name "*.c" | sort | sed "s|$(SRCDIR)/||g" > $(SRCSFILE)
+
+
+
+.PHONY:\
+build-debug # Builds the library, in 'debug' mode (with debug flags and symbol-info)
+build-debug: MODE = debug
+build-debug: CFLAGS += $(CFLAGS_DEBUG)
+build-debug: $(NAME)
+
+.PHONY:\
+build-release # Builds the library, in 'release' mode (with debug flags and symbol-info)
+build-release: MODE = release
+build-release: CFLAGS += $(CFLAGS_RELEASE)
+build-release: $(NAME)
 
 
 
@@ -53,7 +48,7 @@ update-lists-build:
 $(OBJDIR)%.o : $(SRCDIR)%.c
 	@mkdir -p $(@D)
 	@printf "Compiling file: "$@" -> "
-	@$(CC) -o $@ $(CFLAGS) $(INCLUDE_DIRS) -MMD -c $<
+	@$(CC) -o $@ $(CFLAGS) $(INCLUDES) -MMD -c $<
 	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
 
 
@@ -61,7 +56,7 @@ $(OBJDIR)%.o : $(SRCDIR)%.c
 #! Compiles the project executable
 $(NAME): $(OBJS)
 	@printf "Compiling program: "$(NAME)" -> "
-	@$(CC) -o $@ $(CFLAGS) $(INCLUDE_DIRS) $^ $(LDLIBS)
+	@$(CC) -o $@ $(CFLAGS) $(INCLUDES) $^ $(LDLIBS)
 	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
 
 
