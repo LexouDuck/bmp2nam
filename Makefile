@@ -112,7 +112,7 @@ include make/utils/help.mk
 
 # project-specific rules
 include make/rules/build-program.mk
-include make/rules/install-program.mk
+include make/rules/install.mk
 
 include make/rules/init.mk
 include make/rules/prereq.mk

@@ -23,3 +23,8 @@ PACKAGES_INCLUDE = $(addsuffix _INCLUDE, $(PACKAGES_VAR))
 PACKAGES_LINKDIR = $(addsuffix _LINKDIR, $(PACKAGES_VAR))
 PACKAGES_LINKLIB = $(addsuffix _LINKLIB, $(PACKAGES_VAR))
 PACKAGES_LINK    = $(addsuffix _LINK,    $(PACKAGES_VAR))
+
+
+
+#! This variable sets the command which is used to download external packages
+DOWNLOAD = curl --progress-bar

@@ -33,7 +33,7 @@ OBJS = ${SRCS:%.c=$(OBJDIR)%.o}
 DEPS = ${OBJS:.o=.d}
 
 #! List of libraries to link against
-LIBS = $(foreach i,$(PACKAGES_LINK),$($(i)))
+LDLIBS = $(foreach i,$(PACKAGES_LINK),$($(i)))
 
 #! List of folders which store header code files
 INCLUDE_DIRS = -I$(HDRDIR) \
@@ -61,7 +61,7 @@ $(OBJDIR)%.o : $(SRCDIR)%.c
 #! Compiles the project executable
 $(NAME): $(OBJS)
 	@printf "Compiling program: "$(NAME)" -> "
-	@$(CC) -o $@ $(CFLAGS) $(INCLUDE_DIRS) $^ $(LIBS)
+	@$(CC) -o $@ $(CFLAGS) $(INCLUDE_DIRS) $^ $(LDLIBS)
 	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
 
 
