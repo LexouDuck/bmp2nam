@@ -4,6 +4,8 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 CURRENT_DIR := $(patsubst %/,%,$(dir $(MKFILE_PATH)))
 
+
+
 #######################################
 #          Project variables          #
 #######################################
@@ -12,10 +14,6 @@ CURRENT_DIR := $(patsubst %/,%,$(dir $(MKFILE_PATH)))
 NAME = bmp2nam
 
 
-
-#######################################
-#      Project folder structure       #
-#######################################
 
 # repository folders
 
@@ -44,18 +42,6 @@ LOGDIR = ./log/
 LINTDIR = ./lint/
 #! The directory for temporary (can be used for several things - should always be deleted after use)
 TEMPDIR = ./temp/
-
-
-
-#######################################
-#          Project variables          #
-#######################################
-
-#! Path of the file which stores the list of header code files
-HDRSFILE = make/lists/hdrs.txt
-
-#! Path of the file which stores the list of source code files
-SRCSFILE = make/lists/srcs.txt
 
 
 
