@@ -21,7 +21,6 @@ CC_MACOS = clang
 
 #! C Compiler flags & settings
 CFLAGS = \
-	-Werror \
 	-Wall \
 	-Wextra \
 	-Winline \
