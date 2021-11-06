@@ -25,7 +25,9 @@ version-libccc:
 .PHONY:\
 package-libccc # prepares the package for building
 package-libccc:
-	@printf $(C_MAGENTA)"Preparing package: $(LIBCCC)..."$(C_RESET)"\n"
+	@printf $(C_MAGENTA)"Downloading package: $(LIBCCC)..."$(C_RESET)"\n"
+	@git submodule update --init $(LIBCCC_DIR)
+	@printf $(C_MAGENTA)"Building package: $(LIBCCC)..."$(C_RESET)"\n"
 	@$(MAKE) -C $(LIBCCC_DIR) build-$(MODE)
 	@printf $(C_GREEN)"SUCCESS!"$(C_RESET)"\n"
 
