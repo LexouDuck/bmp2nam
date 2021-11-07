@@ -25,7 +25,7 @@ SRCS := $(shell cat $(SRCSFILE))
 
 
 #! Derive list of compiled object files (.o) from list of srcs
-OBJS = ${SRCS:%.c=$(OBJDIR)%.o}
+OBJS = ${SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o}
 
 #! Derive list of dependency files (.d) from list of srcs
 DEPS = ${OBJS:.o=.d}
