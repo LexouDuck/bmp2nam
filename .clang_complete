@@ -4,6 +4,7 @@
 -I./hdr/
 -I./test/
 -I./lib/libccc/hdr/
+-I./lib/SDL2/bin/win64/include/SDL2/
 -std=c99
 -Wall
 -Wextra
