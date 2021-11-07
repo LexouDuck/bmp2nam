@@ -75,7 +75,7 @@
 #define REFPAL_SIZE		(t_size)(REFPAL_COLORS * REFPAL_COLORSIZE)
 
 //! The (relative) file path of the reference palette file
-#define REFPAL_FILEPATH		"gen/nes.pal"
+#define REFPAL_FILEPATH		"pal/nes.pal"
 
 //! @}
 
@@ -254,11 +254,6 @@ typedef struct	s_program_
 
 
 
-//! This is global variable which holds all internal state for the program
-s_program	program;
-
-
-
 //! The total amount of possible unique program option flags
 typedef struct	s_program_arg_
 {
@@ -281,6 +276,11 @@ typedef enum	e_program_arg_
 	PROGRAM_ARG_COLORKEY,
 PROGRAM_ARGS_AMOUNT
 }				e_program_arg;
+
+
+
+//! This is global variable which holds all internal state for the program
+extern s_program	program;
 
 
 

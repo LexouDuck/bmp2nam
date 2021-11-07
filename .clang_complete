@@ -5,6 +5,9 @@
 -I./test/
 -I./lib/libccc/hdr/
 -I./lib/SDL2/bin/win64/include/SDL2/
+-I./lib/SDL2/bin/win32/include/SDL2/
+-I./lib/SDL2/bin/macos/SDL2.framework/Headers/
+-I./lib/SDL2/bin/linux/include/SDL2/
 -std=c99
 -Wall
 -Wextra

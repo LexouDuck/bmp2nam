@@ -12,6 +12,8 @@
 
 
 
+s_program	program = { 0 };
+
 //! A special return value to signal when a help argument has been provided by the user
 #define MATCHED_HELP	((int)-1)
 
