@@ -1,6 +1,7 @@
 -D DEBUG=1
 -Ilocal_folder
 -I./
+-I./src/
 -I./hdr/
 -I./test/
 -I./lib/libccc/hdr/

@@ -61,21 +61,21 @@
 
 
 
-/*!	@defgroup REFPAL
-**	@{
-**		BMP2NAM reference palette file
-**	All the possible colors for the output files (PAL/CHR/NAM)
+/*!    @defgroup REFPAL
+**     @{
+**             BMP2NAM reference palette file
+**     All the possible colors for the output files (PAL/CHR/NAM)
 */
 
 //! The size (in bytes) of one color in the reference palette file
-#define REFPAL_COLORSIZE	(3)
+#define REFPAL_COLORSIZE       (3)
 //! The amount of colors in the reference palette file
-#define REFPAL_COLORS		(64)
+#define REFPAL_COLORS          (64)
 //! The size (in bytes) of the reference palette file
-#define REFPAL_SIZE		(t_size)(REFPAL_COLORS * REFPAL_COLORSIZE)
+#define REFPAL_SIZE            (t_size)(REFPAL_COLORS * REFPAL_COLORSIZE)
 
 //! The (relative) file path of the reference palette file
-#define REFPAL_FILEPATH		"pal/nes.pal"
+#define REFPAL_FILEPATH                "pal/nes.pal"
 
 //! @}
 
@@ -116,9 +116,9 @@
 */
 
 //! The amount of bits-per-pixel for the output CHR file (usually written BPP)
-#define CHR_BPP		(2)
+#define CHR_BPP			(2)
 //! The dimensions of a CHR tile (in pixels, used for both width and height)
-#define CHR_TILE	(8)
+#define CHR_TILE		(8)
 
 //! The maximum amount of colors for the output CHR file
 #define CHR_MAXCOLORS	(4)
@@ -226,6 +226,30 @@ typedef struct	s_tiles_use_
 	s_color_use	colors[BMP_MAXCOLORS];	//! The list of colors (sorted by most-to-least frequently used)
 }				s_tiles_use;
 
+
+
+//! The total amount of possible unique program option flags
+typedef struct	s_program_arg_
+{
+	t_bool			(*handle_arg)(t_char const*);
+	t_char			arg_char;		//!< The character for the short form of this argument: for example, "o" for `-o`
+	t_char const*	arg_long;		//!< The string name for the long form of this argument: for example, "output" for `--output`
+	t_bool			has_value;		//!< If TRUE, the program option expects a value after an equal t_char: `--output=./path/to/file.txt`
+	t_char const*	description;	//!< The description for this argument, as shown in the `--help`
+}				s_program_arg;
+
+//! Lists the various program arguments accepted
+typedef enum	e_program_arg_
+{
+	PROGRAM_ARG_HELP = 0,
+	PROGRAM_ARG_VERBOSE,
+	PROGRAM_ARG_BITMAP_W,
+	PROGRAM_ARG_BITMAP_H,
+	PROGRAM_ARG_PALETTE,
+	PROGRAM_ARG_COLORKEY,
+PROGRAM_ARGS_AMOUNT
+}				e_program_arg;
+
 //! Stores all of this program's internal state
 typedef struct	s_program_
 {
@@ -251,31 +275,6 @@ typedef struct	s_program_
 	s_palette	tiles_palettes[NAM_TILES];		//!< The minimum necessary amount of palettes for all tiles (assuming lossless)
 	t_u32		tiles_palettes_amount;			//!< The total amount of unique palettes necessary for the bitmap
 }				s_program;
-
-
-
-//! The total amount of possible unique program option flags
-typedef struct	s_program_arg_
-{
-	t_bool			(*handle_arg)(t_char const*);
-	t_char			arg_char;		//!< The character for the short form of this argument: for example, "o" for `-o`
-	t_char const*	arg_long;		//!< The string name for the long form of this argument: for example, "output" for `--output`
-	t_bool			has_value;		//!< If TRUE, the program option expects a value after an equal char: `--output=./path/to/file.txt`
-	t_char const*	description;	//!< The description for this argument, as shown in the `--help`
-}				s_program_arg;
-
-
-
-typedef enum	e_program_arg_
-{
-	PROGRAM_ARG_HELP = 0,
-	PROGRAM_ARG_VERBOSE,
-	PROGRAM_ARG_BITMAP_W,
-	PROGRAM_ARG_BITMAP_H,
-	PROGRAM_ARG_PALETTE,
-	PROGRAM_ARG_COLORKEY,
-PROGRAM_ARGS_AMOUNT
-}				e_program_arg;
 
 
 

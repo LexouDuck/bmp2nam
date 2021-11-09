@@ -57,8 +57,8 @@ int		CheckBitmap_LoadReferencePalette(void)
 	Log_Message(&program.logger,
 		"Here is the loaded reference palette (%s), using ANSI terminal color codes:",
 		REFPAL_FILEPATH);
-	char* str;
-	char* tmp;
+	t_char* str;
+	t_char* tmp;
 	index = 0;
 	for (int y = 0; y < 16; ++y)
 	{
