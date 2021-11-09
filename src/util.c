@@ -19,7 +19,7 @@
 ** ************************************************************************** *|
 */
 
-t_u32	Color_Sum(t_argb32 color)
+t_u32 Color_Sum(t_argb32 color)
 {
 	return (
 		(t_u32)Color_ARGB32_Get_R(color) +
@@ -71,7 +71,7 @@ DEFINEFUNC_C_QUICKSORT(t_u8, Compare_Color)
 ** ************************************************************************** *|
 */
 
-t_sint	Palette_Find(s_palette const* palette, t_u8 color)
+t_sint Palette_Find(s_palette const* palette, t_u8 color)
 {
 	for (int i = 0; i < palette->length; ++i)
 	{
@@ -81,7 +81,7 @@ t_sint	Palette_Find(s_palette const* palette, t_u8 color)
 	return (-1);
 }
 
-t_bool	Palette_Contains(s_palette const* palette, t_u8 color)
+t_bool Palette_Contains(s_palette const* palette, t_u8 color)
 {
 	for (int i = 0; i < palette->length; ++i)
 	{
@@ -91,7 +91,7 @@ t_bool	Palette_Contains(s_palette const* palette, t_u8 color)
 	return (FALSE);
 }
 
-t_bool	Palette_ContainsAll(s_palette const* palette, s_palette const* target)
+t_bool Palette_ContainsAll(s_palette const* palette, s_palette const* target)
 {
 	for (int i = 0; i < target->length; ++i)
 	{
@@ -103,7 +103,7 @@ t_bool	Palette_ContainsAll(s_palette const* palette, s_palette const* target)
 
 
 
-s_palette	Palette_GetMostUsedColors(s_color_use const* colors, t_u8 maxlength)
+s_palette Palette_GetMostUsedColors(s_color_use const* colors, t_u8 maxlength)
 {
 	s_palette result = (s_palette)
 	{
@@ -126,7 +126,7 @@ s_palette	Palette_GetMostUsedColors(s_color_use const* colors, t_u8 maxlength)
 }
 
 static
-t_s64	GetSmallestColorDifference(t_u8 target, s_palette const* palette)
+t_s64 GetSmallestColorDifference(t_u8 target, s_palette const* palette)
 {
 	t_s64 result = S64_MAX;
 	t_s64 diff;
@@ -143,9 +143,9 @@ t_s64	GetSmallestColorDifference(t_u8 target, s_palette const* palette)
 	return (result);
 }
 
-s_palette const*	Palette_GetNearest(s_palette target, s_palette const* palettes, t_uint length)
+s_palette const* Palette_GetNearest(s_palette target, s_palette const* palettes, t_uint length)
 {
-	s_colordiff	diffs[BMP_MAXCOLORS] = {0};
+	s_colordiff diffs[BMP_MAXCOLORS] = {0};
 	// check all identical colors
 	for (t_uint i = 0; i < length; ++i)
 	{
@@ -170,14 +170,14 @@ s_palette const*	Palette_GetNearest(s_palette target, s_palette const* palettes,
 ** ************************************************************************** *|
 */
 
-t_char*	ANSI_GetColor(t_argb32 color)
+t_char* ANSI_GetColor(t_argb32 color)
 {
 	return (String_Format(IO_COLOR_BG("%i")"  "IO_RESET, IO_GetColor(color)));
 }
 
 
 
-t_char*	ANSI_GetPalette(s_palette* palette)
+t_char* ANSI_GetPalette(s_palette* palette)
 {
 	t_char* tmp = NULL;
 	t_char* result = String_New(0);
@@ -206,7 +206,7 @@ t_char*	ANSI_GetPalette(s_palette* palette)
 
 
 
-int		PrintColorStats(s_color_use const* array, t_size length)
+int PrintColorStats(s_color_use const* array, t_size length)
 {
 	Log_Message(&program.logger,
 		"The bitmap's colors which will be considered (the %u most used colors):",
