@@ -204,6 +204,7 @@ typedef struct	s_palette_
 	t_u8		colors[PAL_SUB_COLORS];	//!< A single output palette, storing the `length` most used colors
 }				s_palette;
 
+//! Stores a difference between two colors
 typedef struct	s_colordiff_
 {
 	t_s64		value;
