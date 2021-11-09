@@ -12,19 +12,21 @@
 
 
 
+s_program	program = { 0 };
+
 //! A special return value to signal when a help argument has been provided by the user
 #define MATCHED_HELP	((int)-1)
 
 
 
-static t_bool	HandleArg_Verbose(char const* arg)
+static t_bool	HandleArg_Verbose(t_char const* arg)
 {
 	if (arg == NULL)	return (ERROR);
 	program.logger.verbose = TRUE;
 	return (OK);
 }
 
-static t_bool	HandleArg_BitmapWidth(char const* arg)
+static t_bool	HandleArg_BitmapWidth(t_char const* arg)
 {
 	if (arg == NULL)	return (ERROR);
 	program.expected_w = U32_FromString(arg);
@@ -33,7 +35,7 @@ static t_bool	HandleArg_BitmapWidth(char const* arg)
 	return (OK);
 }
 
-static t_bool	HandleArg_BitmapHeight(char const* arg)
+static t_bool	HandleArg_BitmapHeight(t_char const* arg)
 {
 	if (arg == NULL)	return (ERROR);
 	program.expected_h = U32_FromString(arg);
@@ -42,7 +44,7 @@ static t_bool	HandleArg_BitmapHeight(char const* arg)
 	return (OK);
 }
 
-static t_bool	HandleArg_Palette(char const* arg)
+static t_bool	HandleArg_Palette(t_char const* arg)
 {
 	if (arg == NULL)	return (ERROR);
 	t_fd fd = IO_Open(arg, OPEN_READONLY, 0);
@@ -77,7 +79,7 @@ static t_bool	HandleArg_Palette(char const* arg)
 	return (OK);
 }
 
-static t_bool	HandleArg_ColorKey(char const* arg)
+static t_bool	HandleArg_ColorKey(t_char const* arg)
 {
 	if (arg == NULL)	return (ERROR);
 	t_argb32 color = U32_FromString_Hex(arg);
@@ -133,7 +135,7 @@ void	PrintUsage(void)
 	IO_Output_Line("\t""but will add a CHR/NAM file extension to the output filepath (only if needed).");
 	IO_Output_Line("");
 	IO_Output_Line(IO_TEXT_BOLD"OPTIONS"IO_RESET":");
-	IO_Output_Line("\t""Here is the list of accepted options, both in `-c` short char format, and `--string` long string format:");
+	IO_Output_Line("\t""Here is the list of accepted options, both in `-c` short t_char format, and `--string` long string format:");
 	for (int j = 0; j < PROGRAM_ARGS_AMOUNT; ++j)
 	{
 		IO_Output_Format("\t-%c, --%s\t%s\n",
@@ -153,7 +155,7 @@ void	PrintUsage(void)
 */
 
 static
-t_bool	HandleArgs_Option_Char(char const* arg)
+t_bool	HandleArgs_Option_Char(t_char const* arg)
 {
 	for (t_u32 i = 0; i < PROGRAM_ARGS_AMOUNT; ++i)
 	{
@@ -165,7 +167,7 @@ t_bool	HandleArgs_Option_Char(char const* arg)
 				if (arg[0] != '=')
 				{
 					Log_Error(&program.logger, 0,
-						"Invalid argument syntax: expected '=' symbol immediately after \'%c\' option flag char",
+						"Invalid argument syntax: expected '=' symbol immediately after \'%c\' option flag t_char",
 						program_args[i].arg_char);
 					return (FALSE);
 				}
@@ -184,7 +186,7 @@ t_bool	HandleArgs_Option_Char(char const* arg)
 }
 
 static
-t_bool	HandleArgs_Option_String(char const* arg)
+t_bool	HandleArgs_Option_String(t_char const* arg)
 {
 	t_size length;
 
@@ -219,7 +221,7 @@ t_bool	HandleArgs_Option_String(char const* arg)
 }
 
 static
-int		HandleArgs_FilePath_Input(char const* arg)
+int		HandleArgs_FilePath_Input(t_char const* arg)
 {
 	program.file_input = arg;
 	Log_Message(&program.logger, "Processing file: %s...", program.file_input);
@@ -233,14 +235,14 @@ int		HandleArgs_FilePath_Input(char const* arg)
 }
 
 static
-int		HandleArgs_FilePath_Output(char const* arg)
+int		HandleArgs_FilePath_Output(t_char const* arg)
 {
 	program.file_output = arg;
 	return (OK);
 }
 
 static
-int	HandleArgs(int argc, char** argv)
+int	HandleArgs(int argc, t_char** argv)
 {
 	if (argc < 1 || argv == NULL)
 	{
@@ -316,7 +318,7 @@ int	HandleArgs(int argc, char** argv)
 */
 
 static
-int	init(char const* name)
+int	init(t_char const* name)
 {
 	program.called = name;
 
@@ -343,9 +345,9 @@ int	init(char const* name)
 #ifdef main
 #undef main
 #endif
-int main(int argc, char** argv)
+int main(int argc, t_char** argv)
 {
-	char*	tmp;
+	t_char*	tmp;
 
 	if (init(argv[0]))
 		return (ERROR);
@@ -360,7 +362,7 @@ int main(int argc, char** argv)
 	}
 	else if (String_Equals_IgnoreCase(program.file_output + String_Length(program.file_output) - 4, ".nam"))
 	{	// remove ".nam" file extension if provided
-		((char*)program.file_output)[String_Length(program.file_output) - 4] = '\0';
+		((t_char*)program.file_output)[String_Length(program.file_output) - 4] = '\0';
 	}
 
 	if (CheckBitmap_LoadReferencePalette())

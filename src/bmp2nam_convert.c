@@ -250,7 +250,7 @@ int		ConvertBitmap_AssertOutputPalettes(void)
 		"The given BMP file, when broken up into %ix%i-pixel NAM tiles, uses, at minimum, %i palettes:",
 		NAM_TILE, NAM_TILE,
 		program.tiles_palettes_amount);
-	char* str;
+	t_char* str;
 	for (t_uint i = 0; i < program.tiles_palettes_amount; ++i)
 	{
 		palette = &program.tiles_palettes[i];
@@ -358,7 +358,7 @@ int		ConvertBitmap_ApplyOutputPalettes(t_bool user_palette)
 		PAL_SUB_COLORS);
 	for (t_uint i = 0; i < PAL_SUB_AMOUNT; ++i)
 	{
-		char* tmp = ANSI_GetPalette(&program.output_palettes[i]);
+		t_char* tmp = ANSI_GetPalette(&program.output_palettes[i]);
 		Log_Message(&program.logger,
 			"%3i | palette: %s\toccurences: %i\tie: %.1f%%", i, tmp,
 			program.output_palettes[i].popularity,

@@ -170,17 +170,17 @@ s_palette const*	Palette_GetNearest(s_palette target, s_palette const* palettes,
 ** ************************************************************************** *|
 */
 
-char*	ANSI_GetColor(t_argb32 color)
+t_char*	ANSI_GetColor(t_argb32 color)
 {
 	return (String_Format(IO_COLOR_BG("%i")"  "IO_RESET, IO_GetColor(color)));
 }
 
 
 
-char*	ANSI_GetPalette(s_palette* palette)
+t_char*	ANSI_GetPalette(s_palette* palette)
 {
-	char* tmp = NULL;
-	char* result = String_New(0);
+	t_char* tmp = NULL;
+	t_char* result = String_New(0);
 	if (result == NULL)
 	{
 		Log_Error(&program.logger, 0, "Could not allocate palette logging output string");
