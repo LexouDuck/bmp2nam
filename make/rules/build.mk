@@ -3,21 +3,21 @@
 
 
 #! The shell command which generates the list of header code files
-HDRSFILE_GEN = find $(HDRDIR) -name "*.h" | sort | sed "s|$(HDRDIR)/||g" > $(HDRSFILE)
+make_HDRSFILE = find $(HDRDIR) -name "*.h" | sort | sed "s|$(HDRDIR)/||g" > $(HDRSFILE)
 # if file doesn't exist, create it
 ifeq ($(shell test -f $(HDRSFILE) ; echo $$?),1)
 $(warning NOTE: header code list file '$(HDRSFILE)' doesn't exist - creating now...)
-$(shell $(HDRSFILE_GEN))
+$(shell $(call make_HDRSFILE))
 endif
 #! List of all C header code files
 HDRS := $(shell cat $(HDRSFILE))
 
 #! The shell command which generates the list of source code files
-SRCSFILE_GEN = find $(SRCDIR) -name "*.c" | sort | sed "s|$(SRCDIR)/||g" > $(SRCSFILE)
+make_SRCSFILE = find $(SRCDIR) -name "*.c" | sort | sed "s|$(SRCDIR)/||g" > $(SRCSFILE)
 # if file doesn't exist, create it
 ifeq ($(shell test -f $(SRCSFILE) ; echo $$?),1)
 $(warning NOTE: source code list file '$(SRCSFILE)' doesn't exist - creating now...)
-$(shell $(SRCSFILE_GEN))
+$(shell $(call make_SRCSFILE))
 endif
 #! List of all C source code files
 SRCS := $(shell cat $(SRCSFILE))
@@ -41,8 +41,8 @@ INCLUDES = -I$(HDRDIR) $(foreach i,$(PACKAGES_INCLUDE),-I$($(i)))
 .PHONY:\
 lists # Create/update the list of source/header files
 lists:
-	@$(HDRSFILE_GEN)
-	@$(SRCSFILE_GEN)
+	@$(call make_HDRSFILE)
+	@$(call make_SRCSFILE)
 
 
 

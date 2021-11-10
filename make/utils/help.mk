@@ -6,8 +6,12 @@ ifeq ($(MKFILE_PATH),)
 $(error To use the 'help.mk' utils, you must set the 'MKFILE_PATH' variable)
 endif
 
-#! The list of files included by the root-level makefile
-MKFILES = $(MKFILE_PATH) $(shell cat $(MKFILE_PATH) | grep '\binclude\b' | cut -d' ' -f 2-)
+#! The list of files included by the root-level makefile (and any sub-included)
+MKFILES := $(MKFILE_PATH)
+MKFILES += $(shell cat $(MKFILES) | grep '\binclude\b' | cut -d' ' -f 2-)
+MKFILES += $(shell cat $(MKFILES) | grep '\binclude\b' | cut -d' ' -f 2-)
+$(eval MKFILES := $(MKFILES))
+$(info $(MKFILES))
 
 #! The char column at which the doc comments should show up
 COLUMN_DOC = 30

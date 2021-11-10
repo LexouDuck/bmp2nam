@@ -5,7 +5,7 @@
 LIBCCC = libccc
 LIBCCC_DIR = $(LIBDIR)$(LIBCCC)/
 LIBCCC_BIN = $(LIBCCC_DIR)bin/$(OSMODE)/$(LIBMODE)/
-LIBCCC_VERSION := $(shell cat $(PACKAGESLIST) | grep '^$(LIBCCC)' | cut -d'@' -f 2 | cut -d'-' -f 1)
+LIBCCC_VERSION := $(shell cat $(PACKAGESFILE) | grep '^$(LIBCCC)' | cut -d'@' -f 2 | cut -d'-' -f 1)
 
 LIBCCC_INCLUDE = $(LIBCCC_DIR)hdr/
 LIBCCC_LINKDIR = $(LIBCCC_BIN)

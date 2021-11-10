@@ -5,7 +5,7 @@
 LIBSDL = SDL2
 LIBSDL_DIR = $(LIBDIR)$(LIBSDL)/
 LIBSDL_BIN = $(LIBSDL_DIR)bin/$(OSMODE)/
-LIBSDL_VERSION := $(shell cat $(PACKAGESLIST) | grep '^$(LIBSDL)' | cut -d'@' -f 2 | cut -d'-' -f 1)
+LIBSDL_VERSION := $(shell cat $(PACKAGESFILE) | grep '^$(LIBSDL)' | cut -d'@' -f 2 | cut -d'-' -f 1)
 
 LIBSDL_INCLUDE = $(LIBSDL_BIN)include/SDL2/
 LIBSDL_LINKDIR = $(LIBSDL_BIN)bin/

@@ -84,10 +84,6 @@ include make/rules/lint.mk
 include make/rules/format.mk
 include make/rules/debugging.mk
 
-# external packages
-include make/packages/libccc.mk
-include make/packages/SDL2.mk
-
 # general rules
 include make/utils/refactor.mk
 include make/utils/help.mk
