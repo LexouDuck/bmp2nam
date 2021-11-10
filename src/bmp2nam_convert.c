@@ -17,11 +17,11 @@
 ** ************************************************************************** *|
 */
 
-int		ConvertBitmap_ApplyRefPalette(void)
+int ConvertBitmap_ApplyRefPalette(void)
 {
 	Log_Verbose(&program.logger, "Finding nearest colors in the reference palette...");
 	s_color_use* c = NULL;
-	t_u8	nearest[BMP_MAXCOLORS];
+	t_u8    nearest[BMP_MAXCOLORS];
 	for (t_u32 i = 0; i < BMP_MAXCOLORS; ++i)
 	{
 		c = &program.bitmap_colors[i];
@@ -39,9 +39,9 @@ int		ConvertBitmap_ApplyRefPalette(void)
 	}
 
 	Log_Message(&program.logger, "Applying reference palette colors to the bitmap...");
-	t_u8*	pixels = (t_u8*)program.bitmap->pixels;
-	t_u8	pixel;
-	t_u32	index;
+	t_u8*   pixels = (t_u8*)program.bitmap->pixels;
+	t_u8    pixel;
+	t_u32   index;
 	for (int y = 0; y < program.bitmap->h; ++y)
 	for (int x = 0; x < program.bitmap->w; ++x)
 	{
@@ -66,17 +66,18 @@ int		ConvertBitmap_ApplyRefPalette(void)
 
 
 
-int		ConvertBitmap_TotalColorReduction(void)
+int ConvertBitmap_TotalColorReduction(void)
 {
+	t_u8*    pixels = (t_u8*)program.bitmap->pixels;
+	t_u8     pixel;
+	t_u32    pixel_index;
+	t_u8     total;
+	t_argb32 color1;
+	t_argb32 color2;
+	t_u8     old;
+	t_u8     new;
+
 	Log_Message(&program.logger, "Fusing together colors which are perceptually similar...");
-	t_u8*		pixels = (t_u8*)program.bitmap->pixels;
-	t_u8		pixel;
-	t_u32		pixel_index;
-	t_u8		total;
-	t_argb32	color1;
-	t_argb32	color2;
-	t_u8 old;
-	t_u8 new;
 	total = program.bitmap_colors_total;
 	if (total <= PAL_COLORS)
 		return (OK);
@@ -89,9 +90,11 @@ int		ConvertBitmap_TotalColorReduction(void)
 			color2 = program.ref_palette[program.bitmap_colors[j].index];
 			if (Color_ARGB32_Difference(color1, color2) <= THRESHOLD)
 			{
+#if DEBUG
 Log_Verbose(&program.logger, "DEBUG TOTAL | i:%2i, color=%.2X(#%.6X) | j:%2i, color=%.2X(#%.6X)",
 	i, program.bitmap_colors[i].index, color1,
 	j, program.bitmap_colors[i].index, color2);
+#endif
 				old = program.bitmap_colors[j].index;
 				new = program.bitmap_colors[i].index;
 				for (int y = 0; y < NAM_H; ++y)
@@ -118,22 +121,22 @@ Log_Verbose(&program.logger, "DEBUG TOTAL | i:%2i, color=%.2X(#%.6X) | j:%2i, co
 
 
 
-int		ConvertBitmap_TilesColorReduction(void)
+int ConvertBitmap_TilesColorReduction(void)
 {
 	Log_Message(&program.logger, "Removing superfluous colors for each tile in the bitmap...");
-	t_u8*		pixels = (t_u8*)program.bitmap->pixels;
-	t_u8		pixel;
-	t_u32		pixel_index;
-	t_u32		index;
-	t_u8		total;
-	t_u8		length;
-	s_color_use*color;
-	t_argb32	color1;
-	t_argb32	color2;
-	t_argb32	palette[PAL_SUB_COLORS];
-	t_u8 old;
-	t_u8 new;
-	SDL_Point tile;
+	t_u8*        pixels = (t_u8*)program.bitmap->pixels;
+	t_u8         pixel;
+	t_u32        pixel_index;
+	t_u32        index;
+	t_u8         total;
+	t_u8         length;
+	s_color_use* color;
+	t_argb32     color1;
+	t_argb32     color2;
+	t_argb32     palette[PAL_SUB_COLORS];
+	t_u8         old;
+	t_u8         new;
+	SDL_Point    tile;
 	for (tile.y = 0; tile.y < NAM_H_TILES; ++tile.y)
 	for (tile.x = 0; tile.x < NAM_W_TILES; ++tile.x)
 	{
@@ -151,9 +154,11 @@ int		ConvertBitmap_TilesColorReduction(void)
 				color2 = program.ref_palette[program.tiles_colors[index].palette.colors[j]];
 				if (Color_ARGB32_Difference(color1, color2) <= THRESHOLD)
 				{
+#if DEBUG
 Log_Verbose(&program.logger, "DEBUG TILES %3i | i:%2i, color=%.2X(#%.6X) | j:%2i, color=%.2X(#%.6X)", index,
 	i, program.tiles_colors[index].palette.colors[i], color1,
 	j, program.tiles_colors[index].palette.colors[j], color2);
+#endif
 //					Palette_Requantize(&program.tiles_colors[index].palette);
 					old = program.tiles_colors[index].palette.colors[j];
 					new = program.tiles_colors[index].palette.colors[i];
@@ -210,9 +215,9 @@ Log_Verbose(&program.logger, "DEBUG => i:%2i | old:%.2X(#%.6X), new:%.2X(#%.6X)"
 
 
 
-int		ConvertBitmap_AssertOutputPalettes(void)
+int ConvertBitmap_AssertOutputPalettes(void)
 {
-	s_palette*	palette;
+	s_palette*  palette;
 
 	// check the popularity of each of the unique palettes
 	for (t_uint i = 0; i < NAM_TILES; ++i)
@@ -302,7 +307,7 @@ int		ConvertBitmap_AssertOutputPalettes(void)
 
 
 static
-int		FindOutputPalette(int index_tile, t_bool user_palette)
+int FindOutputPalette(int index_tile, t_bool user_palette)
 {
 	s_palette const* result;
 
@@ -341,7 +346,7 @@ int		FindOutputPalette(int index_tile, t_bool user_palette)
 }
 
 static
-int		FindOutputColor(t_u8 pixel, t_argb32 const* colors, t_size length)
+int FindOutputColor(t_u8 pixel, t_argb32 const* colors, t_size length)
 {
 	t_argb32 const* color = Color_ARGB32_GetNearest(program.ref_palette[pixel], colors, length);
 	if (color == NULL)
@@ -349,8 +354,17 @@ int		FindOutputColor(t_u8 pixel, t_argb32 const* colors, t_size length)
 	return (color - colors);
 }
 
-int		ConvertBitmap_ApplyOutputPalettes(t_bool user_palette)
+int ConvertBitmap_ApplyOutputPalettes(t_bool user_palette)
 {
+	t_u8*     pixels = (t_u8*)program.bitmap->pixels;
+	t_u8      pixel;
+	int       index_color;
+	int       index_palette;
+	t_u32     index;
+	t_u32     index_tile = 0;
+	t_argb32  output_colors[PAL_SUB_AMOUNT][PAL_SUB_COLORS];
+	SDL_Point tile = { .x=0, .y=0 };
+
 	Log_Message(&program.logger, "Applying final palette colors to the bitmap...");
 	Log_Message(&program.logger,
 		"The final set of %i palettes of %i colors each (chosen by popularity):",
@@ -365,14 +379,6 @@ int		ConvertBitmap_ApplyOutputPalettes(t_bool user_palette)
 			program.output_palettes[i].popularity / (NAM_TILES / 100.));
 		String_Delete(&tmp);
 	}
-	t_u8*	pixels = (t_u8*)program.bitmap->pixels;
-	t_u8	pixel;
-	int		index_color;
-	int		index_palette;
-	t_u32	index;
-	t_u32	index_tile = 0;
-	t_argb32 output_colors[PAL_SUB_AMOUNT][PAL_SUB_COLORS];
-	SDL_Point tile = { .x=0, .y=0 };
 	for (int i = 0; i < PAL_SUB_AMOUNT; ++i)
 	for (int j = 0; j < PAL_SUB_COLORS; ++j)
 	{

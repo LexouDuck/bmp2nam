@@ -20,7 +20,7 @@
 ** ************************************************************************** *|
 */
 
-int		CheckBitmap_LoadReferencePalette(void)
+int     CheckBitmap_LoadReferencePalette(void)
 {
 	// open and load reference palette file
 	t_fd fd = IO_Open(REFPAL_FILEPATH, OPEN_READONLY, 0);
@@ -88,7 +88,7 @@ int		CheckBitmap_LoadReferencePalette(void)
 
 
 
-int		CheckBitmap_LoadColors(void)
+int     CheckBitmap_LoadColors(void)
 {
 	if (program.bitmap == NULL ||
 		program.bitmap->format == NULL ||
@@ -111,7 +111,7 @@ int		CheckBitmap_LoadColors(void)
 
 
 
-int		CheckBitmap_PixelFormat(void)
+int     CheckBitmap_PixelFormat(void)
 {
 	if (program.bitmap->format == NULL)
 	{
@@ -159,7 +159,7 @@ int		CheckBitmap_PixelFormat(void)
 
 
 
-int 	CheckBitmap_Dimensions(void)
+int     CheckBitmap_Dimensions(void)
 {
 	if (program.bitmap->w == NAM_W &&
 		program.bitmap->h == NAM_H)
@@ -218,11 +218,11 @@ int 	CheckBitmap_Dimensions(void)
 
 
 
-int		CheckBitmap_TotalColors(void)
+int     CheckBitmap_TotalColors(void)
 {
-	t_u8*	pixels = (t_u8*)program.bitmap->pixels;
-	t_u8	pixel;
-	t_u8	colors_present = 0;
+	t_u8*   pixels = (t_u8*)program.bitmap->pixels;
+	t_u8    pixel;
+	t_u8    colors_present = 0;
 	for (int y = 0; y < program.bitmap->h; ++y)
 	for (int x = 0; x < program.bitmap->w; ++x)
 	{
@@ -250,7 +250,7 @@ int		CheckBitmap_TotalColors(void)
 
 
 static
-int		GetColorOccurIndex(t_u8 bmp_color)
+int     GetColorOccurIndex(t_u8 bmp_color)
 {
 	for (int i = 0; i < BMP_MAXCOLORS; ++i)
 	{
@@ -262,13 +262,13 @@ int		GetColorOccurIndex(t_u8 bmp_color)
 	return (ERROR);
 }
 
-int		CheckBitmap_TilesColors(void)
+int     CheckBitmap_TilesColors(void)
 {
-	t_u32	index;
-	t_u8*	pixels = (t_u8*)program.bitmap->pixels;
-	t_u8	pixel;
-	t_u8	colors_present = 0;
-	int		color;
+	t_u32     index;
+	t_u8*     pixels = (t_u8*)program.bitmap->pixels;
+	t_u8      pixel;
+	t_u8      colors_present = 0;
+	int       color;
 	SDL_Point tile;
 	for (tile.y = 0; tile.y < NAM_H_TILES; ++tile.y)
 	for (tile.x = 0; tile.x < NAM_W_TILES; ++tile.x)
@@ -326,10 +326,10 @@ int		CheckBitmap_TilesColors(void)
 
 
 
-int		CheckBitmap_DuplicatePalettes(void)
+int     CheckBitmap_DuplicatePalettes(void)
 {
-	s_palette*	palette;
-	s_palette*	other;
+	s_palette*  palette;
+	s_palette*  other;
 
 	for (int i = 0; i < NAM_TILES; ++i)
 	{

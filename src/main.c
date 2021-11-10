@@ -12,41 +12,45 @@
 
 
 
-s_program	program = { 0 };
+s_program program = { 0 };
 
 //! A special return value to signal when a help argument has been provided by the user
-#define MATCHED_HELP	((int)-1)
+#define MATCHED_HELP    ((int)-1)
 
 
 
-static t_bool	HandleArg_Verbose(t_char const* arg)
+static
+t_bool HandleArg_Verbose(t_char const* arg)
 {
-	if (arg == NULL)	return (ERROR);
+	if (arg == NULL) return (ERROR);
 	program.logger.verbose = TRUE;
 	return (OK);
 }
 
-static t_bool	HandleArg_BitmapWidth(t_char const* arg)
+static
+t_bool HandleArg_BitmapWidth(t_char const* arg)
 {
-	if (arg == NULL)	return (ERROR);
+	if (arg == NULL) return (ERROR);
 	program.expected_w = U32_FromString(arg);
 	if (program.expected_w == 0)
 		return (ERROR);
 	return (OK);
 }
 
-static t_bool	HandleArg_BitmapHeight(t_char const* arg)
+static
+t_bool HandleArg_BitmapHeight(t_char const* arg)
 {
-	if (arg == NULL)	return (ERROR);
+	if (arg == NULL) return (ERROR);
 	program.expected_h = U32_FromString(arg);
 	if (program.expected_h == 0)
 		return (ERROR);
 	return (OK);
 }
 
-static t_bool	HandleArg_Palette(t_char const* arg)
+static
+t_bool HandleArg_Palette(t_char const* arg)
 {
-	if (arg == NULL)	return (ERROR);
+	if (arg == NULL) return (ERROR);
 	t_fd fd = IO_Open(arg, OPEN_READONLY, 0);
 	if (fd < 0)
 	{
@@ -79,9 +83,10 @@ static t_bool	HandleArg_Palette(t_char const* arg)
 	return (OK);
 }
 
-static t_bool	HandleArg_ColorKey(t_char const* arg)
+static
+t_bool HandleArg_ColorKey(t_char const* arg)
 {
-	if (arg == NULL)	return (ERROR);
+	if (arg == NULL) return (ERROR);
 	t_argb32 color = U32_FromString_Hex(arg);
 	t_argb32 const* match = Color_ARGB32_GetNearest(color, program.ref_palette, REFPAL_COLORS);
 	if (match == NULL)
@@ -102,14 +107,14 @@ static t_bool	HandleArg_ColorKey(t_char const* arg)
 
 
 //! This is the list of accepted program arguments
-static s_program_arg const	program_args[PROGRAM_ARGS_AMOUNT] =
+static s_program_arg const program_args[PROGRAM_ARGS_AMOUNT] =
 {
-	(s_program_arg){ NULL,					'h', "help",	 FALSE,	"If provided, display only the program usage help and exit." },
-	(s_program_arg){ HandleArg_Verbose,		'v', "verbose",	 FALSE,	"If provided, displays additional information while processing the BMP." },
-	(s_program_arg){ HandleArg_BitmapWidth,	'w', "bitmap_w", FALSE,	"(expects value, integer: `-w=256`) If provided, sets the expected bitmap width dimension." },
-	(s_program_arg){ HandleArg_BitmapHeight,'h', "bitmap_h", FALSE,	"(expects value, integer: `-h=240`) If provided, sets the expected bitmap height dimension." },
-	(s_program_arg){ HandleArg_Palette,		'p', "palette",	 TRUE,	"(expects value, filepath: `-p=./path/to/file.pal`) If provided, forces the output to use the given palette (must be a binary .pal file, containing at most 64 different 32-bit colors)." },
-	(s_program_arg){ HandleArg_ColorKey,	'c', "colorkey", TRUE,	"(expects value, color: `-c=FF00FF`) If provided, the given color value will be present as the first color for all palettes."}
+	(s_program_arg){ NULL,                  'h', "help",     FALSE, "If provided, display only the program usage help and exit." },
+	(s_program_arg){ HandleArg_Verbose,     'v', "verbose",  FALSE, "If provided, displays additional information while processing the BMP." },
+	(s_program_arg){ HandleArg_BitmapWidth, 'w', "bitmap_w", FALSE, "(expects value, integer: `-w=256`) If provided, sets the expected bitmap width dimension." },
+	(s_program_arg){ HandleArg_BitmapHeight,'h', "bitmap_h", FALSE, "(expects value, integer: `-h=240`) If provided, sets the expected bitmap height dimension." },
+	(s_program_arg){ HandleArg_Palette,     'p', "palette",  TRUE,  "(expects value, filepath: `-p=./path/to/file.pal`) If provided, forces the output to use the given palette (must be a binary .pal file, containing at most 64 different 32-bit colors)." },
+	(s_program_arg){ HandleArg_ColorKey,    'c', "colorkey", TRUE,  "(expects value, color: `-c=FF00FF`) If provided, the given color value will be present as the first color for all palettes."}
 };
 
 
@@ -121,7 +126,7 @@ static s_program_arg const	program_args[PROGRAM_ARGS_AMOUNT] =
 */
 
 static
-void	PrintUsage(void)
+void PrintUsage(void)
 {
 	IO_Output_Line(IO_TEXT_BOLD"USAGE"IO_RESET":");
 	IO_Output_Line("\t""bmp2nam [OPTIONS] INPUTFILE [OUTPUTFILE]");
@@ -155,7 +160,7 @@ void	PrintUsage(void)
 */
 
 static
-t_bool	HandleArgs_Option_Char(t_char const* arg)
+t_bool HandleArgs_Option_Char(t_char const* arg)
 {
 	for (t_u32 i = 0; i < PROGRAM_ARGS_AMOUNT; ++i)
 	{
@@ -186,7 +191,7 @@ t_bool	HandleArgs_Option_Char(t_char const* arg)
 }
 
 static
-t_bool	HandleArgs_Option_String(t_char const* arg)
+t_bool HandleArgs_Option_String(t_char const* arg)
 {
 	t_size length;
 
@@ -221,7 +226,7 @@ t_bool	HandleArgs_Option_String(t_char const* arg)
 }
 
 static
-int		HandleArgs_FilePath_Input(t_char const* arg)
+int HandleArgs_FilePath_Input(t_char const* arg)
 {
 	program.file_input = arg;
 	Log_Message(&program.logger, "Processing file: %s...", program.file_input);
@@ -235,14 +240,14 @@ int		HandleArgs_FilePath_Input(t_char const* arg)
 }
 
 static
-int		HandleArgs_FilePath_Output(t_char const* arg)
+int HandleArgs_FilePath_Output(t_char const* arg)
 {
 	program.file_output = arg;
 	return (OK);
 }
 
 static
-int	HandleArgs(int argc, t_char** argv)
+int HandleArgs(int argc, t_char** argv)
 {
 	if (argc < 1 || argv == NULL)
 	{
@@ -255,7 +260,7 @@ int	HandleArgs(int argc, t_char** argv)
 		PrintUsage();
 		return (ERROR);
 	}
-	int	match;
+	int match;
 	int tmp;
 	for (int i = 1; i < argc; ++i)
 	{
@@ -318,23 +323,23 @@ int	HandleArgs(int argc, t_char** argv)
 */
 
 static
-int	init(t_char const* name)
+int init(t_char const* name)
 {
 	program.called = name;
 
 	// logger initiliazing
 	program.logger = (s_logger)
 	{
-//		.in_use			= FALSE,
-		.silence_logs	= FALSE,
-		.silence_errors	= FALSE,
-		.timestamp		= FALSE,
-		.verbose		= FALSE,
-		.obfuscated		= FALSE,
-		.append			= FALSE,
-		.format			= LOGFORMAT_ANSI,
-		.fd				= STDOUT,
-		.path			= NULL,
+//      .in_use         = FALSE,
+		.silence_logs   = FALSE,
+		.silence_errors = FALSE,
+		.timestamp      = FALSE,
+		.verbose        = FALSE,
+		.obfuscated     = FALSE,
+		.append         = FALSE,
+		.format         = LOGFORMAT_ANSI,
+		.fd             = STDOUT,
+		.path           = NULL,
 	};
 	Logger_Init(&program.logger);
 	return (OK);
@@ -347,21 +352,21 @@ int	init(t_char const* name)
 #endif
 int main(int argc, t_char** argv)
 {
-	t_char*	tmp;
-
+	t_char* tmp;
+	// perform initialisation of program state variables
 	if (init(argv[0]))
 		return (ERROR);
-
+	// parse and handle commandline arguments
 	if (HandleArgs(argc, argv))
 		return (ERROR);
-
+	// create default output filepath if not provided
 	if (program.file_output == NULL)
-	{	// create default output filepath if not provided
+	{
 		int extension = String_IndexOf_R_Char(program.file_input, '.');
 		program.file_output = String_Sub(program.file_input, 0, extension);
 	}
 	else if (String_Equals_IgnoreCase(program.file_output + String_Length(program.file_output) - 4, ".nam"))
-	{	// remove ".nam" file extension if provided
+	{   // remove ".nam" file extension if provided
 		((t_char*)program.file_output)[String_Length(program.file_output) - 4] = '\0';
 	}
 
