@@ -14,13 +14,17 @@ ifeq ($(shell test -f $(VERSIONFILE) ; echo $$?),1)
 $(warning NOTE: version file '$(VERSIONFILE)' doesn't exist - creating now...)
 $(shell $(call make_VERSIONFILE,0,0,1))
 endif
+#! The filepath in which to store the version number
+VERSIONFULL := $(shell cat $(VERSIONFILE))
+
+
 
 #! The project's name, as parsed from the VERSION file
-PARSED_NAME      := $(shell cat $(VERSIONFILE) | cut -d'@' -f 1)
+PARSED_NAME      := $(shell echo $(VERSIONFULL) | cut -d'@' -f 1)
 #! The project's commit revision hash code, as parsed from the VERSION file
-PARSED_COMMITREF := $(shell cat $(VERSIONFILE) | rev | cut -d'-' -f 1 | rev)
+PARSED_COMMITREF := $(shell echo $(VERSIONFULL) | rev | cut -d'-' -f 1 | rev)
 #! The project's version number, as parsed from the VERSION file
-PARSED_VERSION   := $(shell cat $(VERSIONFILE) | cut -d'@' -f 2 | cut -d'-' -f 1)
+PARSED_VERSION   := $(shell echo $(VERSIONFULL) | cut -d'@' -f 2 | cut -d'-' -f 1)
 
 VERSION_MAJOR := $(shell echo $(PARSED_VERSION) | cut -d'.' -f 1)
 VERSION_MINOR := $(shell echo $(PARSED_VERSION) | cut -d'.' -f 2)
@@ -32,12 +36,13 @@ VERSION = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_BUILD)
 
 
 ifneq ($(PARSED_NAME),$(NAME))
-$(error Project name mismatch: NAME is "$(NAME)", but version file "$(VERSIONFILE)" has name "$(PARSED_NAME)")
+$(error Project name mismatch: NAME is "$(NAME)",\
+	but version file "$(VERSIONFILE)" has name "$(PARSED_NAME)")
 endif
 
 ifneq ($(PARSED_COMMITREF),$(COMMITREF))
-#$(warning Project commit changed: current HEAD is "$(COMMITREF)",\
-#	but version file "$(VERSIONFILE)" has "$(PARSED_COMMITREF)")
+$(info Project commit changed: updating version file...)
+$(shell $(call make_VERSIONFILE,$(VERSION_MAJOR),$(VERSION_MINOR),$(VERSION_BUILD)))
 endif
 
 

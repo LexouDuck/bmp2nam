@@ -3,7 +3,7 @@
 
 
 .PHONY:\
-clean # Deletes any files built by the 'all' rule
+clean # Deletes all intermediary build files
 clean:
 	@printf $(C_CYAN)"Deleting all .o files..."$(C_RESET)"\n"
 	@rm -f $(OBJS)
@@ -12,11 +12,21 @@ clean:
 	@rm -f $(DEPS)
 	@rm -f $(DEPS_TEST)
 	@rm -f *.d
-	@printf $(C_CYAN)"Deleting program: "$(NAME)""$(C_RESET)"\n"
+
+
+
+.PHONY:\
+clean-exe # Deletes any libraries/executables
+clean-exe:
 	@rm -f $(NAME)
 	@rm -f $(NAME).*
-
-
+	@printf $(C_CYAN)"Deleting library: "$(NAME_STATIC)""$(C_RESET)"\n"
+	@rm -f $(NAME_STATIC)
+	@printf $(C_CYAN)"Deleting library: "$(NAME_DYNAMIC)""$(C_RESET)"\n"
+	@rm -f $(NAME_DYNAMIC)
+	@printf $(C_CYAN)"Deleting program: "$(NAME_TEST)""$(C_RESET)"\n"
+	@rm -f $(NAME_TEST)
+	@rm -f $(NAME_TEST).d
 
 .PHONY:\
 clean-obj # Deletes the ./obj folder

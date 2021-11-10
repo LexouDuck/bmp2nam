@@ -3,8 +3,8 @@
 
 
 .PHONY:\
-install # Installs the program(s) (copies them from `./bin/` to `/usr/local/bin`, typically)
-install:
+install # Installs the libraries/programs (copies them from `./bin/` to `/usr/local/`, typically)
+install: $(NAME)
 	@printf $(C_CYAN)"Installing library: $(NAME)..."$(C_RESET)"\n"
 	@mkdir -p $(INSTALLDIR)/bin/
 	@$(INSTALL_PROGRAM) $(NAME) $(INSTALLDIR)/bin/$(NAME)

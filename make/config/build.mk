@@ -2,14 +2,6 @@
 
 
 
-#! Path of the file which stores the list of header code files
-HDRSFILE = make/lists/hdrs.txt
-
-#! Path of the file which stores the list of source code files
-SRCSFILE = make/lists/srcs.txt
-
-
-
 #! C Compiler
 CC	= _
 CC_WIN32 =   i686-w64-mingw32-gcc

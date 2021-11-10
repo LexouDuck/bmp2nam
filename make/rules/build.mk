@@ -2,6 +2,8 @@
 
 
 
+#! Path of the file which stores the list of header code files
+HDRSFILE = make/lists/hdrs.txt
 #! The shell command which generates the list of header code files
 make_HDRSFILE = find $(HDRDIR) -name "*.h" | sort | sed "s|$(HDRDIR)/||g" > $(HDRSFILE)
 # if file doesn't exist, create it
@@ -12,6 +14,10 @@ endif
 #! List of all C header code files
 HDRS := $(shell cat $(HDRSFILE))
 
+
+
+#! Path of the file which stores the list of source code files
+SRCSFILE = make/lists/srcs.txt
 #! The shell command which generates the list of source code files
 make_SRCSFILE = find $(SRCDIR) -name "*.c" | sort | sed "s|$(SRCDIR)/||g" > $(SRCSFILE)
 # if file doesn't exist, create it
@@ -25,15 +31,15 @@ SRCS := $(shell cat $(SRCSFILE))
 
 
 #! Derive list of compiled object files (.o) from list of srcs
-OBJS = $(SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o)
+OBJS := $(SRCS:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
 #! Derive list of dependency files (.d) from list of srcs
-DEPS = $(OBJS:.o=.d)
+DEPS := $(OBJS:.o=.d)
 
-#! List of libraries to link against
+#! GNU conventional variable: List of libraries to link against
 LDLIBS = $(foreach i,$(PACKAGES_LINK),$($(i)))
 
-#! List of folders which store header code files
+#! GNU conventional variable: List of folders which store header code files
 INCLUDES = -I$(HDRDIR) $(foreach i,$(PACKAGES_INCLUDE),-I$($(i)))
 
 
@@ -64,7 +70,7 @@ build-release: $(NAME)
 $(OBJDIR)%.o : $(SRCDIR)%.c
 	@mkdir -p $(@D)
 	@printf "Compiling file: "$@" -> "
-	@$(CC) -o $@ $(CFLAGS) $(INCLUDES) -MMD -c $<
+	@$(CC) -o $@ $(CFLAGS) -MMD $(INCLUDES) -c $<
 	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
 
 

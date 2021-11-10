@@ -9,7 +9,7 @@ PACKAGES = \
 
 
 
-#! The makefile variable name for each packages (typically uppercase)
+#! The makefile variable prefix for each package (typically, the uppercase equivalent)
 PACKAGESVARS = \
 	LIBCCC \
 	LIBSDL \

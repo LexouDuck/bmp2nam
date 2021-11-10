@@ -4,10 +4,12 @@
 
 #! The file which stores all dependency package version info
 PACKAGESFILE = make/lists/packages.txt
+#! The shell command to generate the packages list file, if it doesn't exist
+make_PACKAGESFILE = $(foreach i,$(PACKAGES), echo "$(i)@0.0.0-?" >> $(PACKAGESFILE) ;)
 # if file doesn't exist, create it
 ifeq ($(shell test -f $(PACKAGESFILE) ; echo $$?),1)
 $(warning NOTE: packages list file '$(PACKAGESFILE)' doesn't exist - creating now...)
-$(foreach i,$(PACKAGES), $(shell echo "$(i)@0.0.0-?" >> $(PACKAGESFILE)))
+$(shell $(call make_PACKAGESFILE))
 endif
 
 
