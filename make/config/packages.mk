@@ -17,7 +17,7 @@ PACKAGES_VAR = \
 
 
 #! The shell command to generate an initial packages list file if none exists
-PACKAGESLIST_GEN = \
+make_packageslist = \
 	echo $(PACKAGES) \
 	| tr -s '[:blank:]' '\n' \
 	| awk '{ print $$0 "@0.0.0-" }' \
@@ -28,7 +28,7 @@ PACKAGESLIST = make/lists/packages.txt
 # if file doesn't exist, create it
 ifeq ($(shell test -f $(PACKAGESLIST) ; echo $$?),1)
 $(warning NOTE: packages list file '$(PACKAGESLIST)' doesn't exist - creating now...)
-$(shell $(PACKAGESLIST_GEN))
+$(shell $(make_packageslist))
 endif
 
 
