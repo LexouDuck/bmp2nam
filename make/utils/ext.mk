@@ -1,4 +1,4 @@
-#! This file holds a cross-platform variables to abstract-away file extensions
+#! This file holds cross-platform convenience variables to abstract-away file extensions
 
 
 

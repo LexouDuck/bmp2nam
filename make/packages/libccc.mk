@@ -15,19 +15,11 @@ LIBCCC_LINK = -L$(LIBCCC_LINKDIR) $(LIBCCC_LINKLIB)
 
 
 .PHONY:\
-version-libccc # sets the desired version of the package
-version-libccc:
-	@cat $(PACKAGESLIST) \
-	| awk '{ if (/^$(LIBCCC)@/) { print "$(LIBCCC)@" } else { print } }'
-
-
-
-.PHONY:\
 package-libccc # prepares the package for building
 package-libccc:
-	@printf $(C_MAGENTA)"Downloading package: $(LIBCCC)..."$(C_RESET)"\n"
+	@printf $(C_CYAN)"Downloading package: $(LIBCCC)..."$(C_RESET)"\n"
 	@git submodule update --init $(LIBCCC_DIR)
-	@printf $(C_MAGENTA)"Building package: $(LIBCCC)..."$(C_RESET)"\n"
+	@printf $(C_CYAN)"Building package: $(LIBCCC)..."$(C_RESET)"\n"
 	@$(MAKE) -C $(LIBCCC_DIR) build-$(MODE)
 	@printf $(C_GREEN)"SUCCESS!"$(C_RESET)"\n"
 
@@ -36,7 +28,7 @@ package-libccc:
 .PHONY:\
 update-libccc # updates the package to the latest version
 update-libccc:
-	@printf $(C_MAGENTA)"Checking new versions for package: $(LIBCCC)..."$(C_RESET)"\n"
+	@printf $(C_CYAN)"Checking new versions for package: $(LIBCCC)..."$(C_RESET)"\n"
 	@echo "=> Current version is: $(LIBCCC_VERSION)"
 	@cd $(LIBCCC_DIR) ; \
 	if git status | grep -q "HEAD detached" ; then \

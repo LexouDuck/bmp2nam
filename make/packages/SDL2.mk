@@ -58,16 +58,9 @@ endif
 
 
 .PHONY:\
-version-SDL2 # sets the desired version of the package
-version-SDL2:
-	@cp -f $(LIBSDL_DIR)VERSION $(LIBSDL_VERFILE)
-
-
-
-.PHONY:\
 package-SDL2 # prepares the package for building
 package-SDL2:
-	@printf $(C_MAGENTA)"Downloading package: $(LIBSDL)..."$(C_RESET)"\n"
+	@printf $(C_CYAN)"Downloading package: $(LIBSDL)..."$(C_RESET)"\n"
 	@mkdir -p $(LIBSDL_BIN)
 	@curl $(LIBSDL_URL)$(LIBSDL_PKG) --progress-bar --output $(LIBSDL_PKG)
 	@$(LIBSDL_PKG_INSTALL)
@@ -79,7 +72,7 @@ package-SDL2:
 .PHONY:\
 update-SDL2 # updates the package to the latest version
 update-SDL2:
-	@printf $(C_MAGENTA)"Checking new versions for package: $(LIBSDL)..."$(C_RESET)"\n"
+	@printf $(C_CYAN)"Checking new versions for package: $(LIBSDL)..."$(C_RESET)"\n"
 	@echo "=> Current version is: $(LIBSDL_VERSION)"
 	@curl --silent $(LIBSDL_URL) \
 	| grep 'SDL2' \
