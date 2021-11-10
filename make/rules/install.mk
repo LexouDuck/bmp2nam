@@ -5,16 +5,16 @@
 .PHONY:\
 install # Installs the program(s) (copies them from `./bin/` to `/usr/local/bin`, typically)
 install:
-	@echo "Installing program: $(NAME)..."
+	@printf $(C_CYAN)"Installing library: $(NAME)..."$(C_RESET)"\n"
 	@mkdir -p $(INSTALLDIR)/bin/
 	@$(INSTALL_PROGRAM) $(NAME) $(INSTALLDIR)/bin/$(NAME)
-	@echo "done"
+	@printf $(C_GREEN)"SUCCESS!"$(C_RESET)"\n"
 
 
 
 .PHONY:\
 uninstall # Removes the installed libraries/programs (deletes files in `/usr/local/`, typically)
 uninstall:
-	@echo "Uninstalling program: $(NAME)..."
+	@printf $(C_CYAN)"Uninstalling library: $(NAME)..."$(C_RESET)"\n"
 	@rm -f $(INSTALLDIR)/bin/$(NAME)
-	@echo "done"
+	@printf $(C_GREEN)"SUCCESS!"$(C_RESET)"\n"

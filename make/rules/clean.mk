@@ -5,14 +5,14 @@
 .PHONY:\
 clean # Deletes any files built by the 'all' rule
 clean:
-	@printf "Deleting all .o files...\n"
+	@printf $(C_CYAN)"Deleting all .o files..."$(C_RESET)"\n"
 	@rm -f $(OBJS)
 	@rm -f $(OBJS_TEST)
-	@printf "Deleting all .d files...\n"
+	@printf $(C_CYAN)"Deleting all .d files..."$(C_RESET)"\n"
 	@rm -f $(DEPS)
 	@rm -f $(DEPS_TEST)
 	@rm -f *.d
-	@printf "Deleting program: "$(NAME)"\n"
+	@printf $(C_CYAN)"Deleting program: "$(NAME)""$(C_RESET)"\n"
 	@rm -f $(NAME)
 	@rm -f $(NAME).*
 
@@ -21,25 +21,25 @@ clean:
 .PHONY:\
 clean-obj # Deletes the ./obj folder
 clean-obj:
-	@printf "Deleting "$(OBJDIR)" folder...\n"
+	@printf $(C_CYAN)"Deleting "$(OBJDIR)" folder..."$(C_RESET)"\n"
 	@rm -rf $(OBJDIR)
 
 .PHONY:\
 clean-bin # Deletes the ./bin folder
 clean-bin:
-	@printf "Deleting "$(BINDIR)" folder...\n"
+	@printf $(C_CYAN)"Deleting "$(BINDIR)" folder..."$(C_RESET)"\n"
 	@rm -rf $(BINDIR)
 
 .PHONY:\
 clean-logs # Deletes the ./log folder
 clean-logs:
-	@printf "Deleting "$(LOGDIR)" folder...\n"
+	@printf $(C_CYAN)"Deleting "$(LOGDIR)" folder..."$(C_RESET)"\n"
 	@rm -rf $(LOGDIR)
 
 .PHONY:\
 clean-lint # Deletes the ./lint folder
 clean-lint:
-	@printf "Deleting "$(LINTDIR)" folder...\n"
+	@printf $(C_CYAN)"Deleting "$(LINTDIR)" folder..."$(C_RESET)"\n"
 	@rm -rf $(LINTDIR)
 
 
