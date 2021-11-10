@@ -4,6 +4,7 @@
 PROJECT_1=~/Projects/bmp2nam
 PROJECT_2=~/Projects/libccc
 FILES='
+	Makefile
 	make/config/build.mk
 	make/config/modes.mk
 	make/config/packages.mk

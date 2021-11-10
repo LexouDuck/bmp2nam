@@ -15,6 +15,10 @@ NAME = bmp2nam
 
 
 
+#######################################
+#      Project folder structure       #
+#######################################
+
 # repository folders
 
 #! The directory for header code files (stores `.h` files)
@@ -80,9 +84,9 @@ include make/rules/version.mk
 include make/rules/dist.mk
 include make/rules/clean.mk
 
+include make/rules/debugging.mk
 include make/rules/lint.mk
 include make/rules/format.mk
-include make/rules/debugging.mk
 
 # general rules
 include make/utils/refactor.mk

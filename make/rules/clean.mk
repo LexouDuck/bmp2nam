@@ -7,10 +7,8 @@ clean # Deletes all intermediary build files
 clean:
 	@printf $(C_CYAN)"Deleting all .o files..."$(C_RESET)"\n"
 	@rm -f $(OBJS)
-	@rm -f $(OBJS_TEST)
 	@printf $(C_CYAN)"Deleting all .d files..."$(C_RESET)"\n"
 	@rm -f $(DEPS)
-	@rm -f $(DEPS_TEST)
 	@rm -f *.d
 
 
@@ -18,15 +16,9 @@ clean:
 .PHONY:\
 clean-exe # Deletes any libraries/executables
 clean-exe:
+	@printf $(C_CYAN)"Deleting program: "$(NAME)""$(C_RESET)"\n"
 	@rm -f $(NAME)
 	@rm -f $(NAME).*
-	@printf $(C_CYAN)"Deleting library: "$(NAME_STATIC)""$(C_RESET)"\n"
-	@rm -f $(NAME_STATIC)
-	@printf $(C_CYAN)"Deleting library: "$(NAME_DYNAMIC)""$(C_RESET)"\n"
-	@rm -f $(NAME_DYNAMIC)
-	@printf $(C_CYAN)"Deleting program: "$(NAME_TEST)""$(C_RESET)"\n"
-	@rm -f $(NAME_TEST)
-	@rm -f $(NAME_TEST).d
 
 .PHONY:\
 clean-obj # Deletes the ./obj folder
