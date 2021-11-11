@@ -14,6 +14,11 @@ LIBCCC_LINK = -L$(LIBCCC_LINKDIR) $(LIBCCC_LINKLIB)
 
 
 
+LIBCCC_URL = https://github.com/LexouDuck/libccc
+LIBCCC_URL_VERSION = https://raw.githubusercontent.com/LexouDuck/libccc/master/VERSION
+
+
+
 .PHONY:\
 package-libccc # prepares the package for building
 package-libccc:
@@ -38,6 +43,8 @@ update-libccc:
 		printf "after making sure that you have no uncommitted/unpushed local working changes.""\n" ; \
 		exit 1 ; \
 	fi ; \
-	git pull
-	@#$(call packages_set_version,,) # TODO parse version from libccc version file ?
-	@$(MAKE) package-libccc
+	newer_version=`curl $(LIBCCC_URL_VERSION) | cut -d'@' -f 2 | cut -d'-' -f 1` ; \
+	printf "Newest version is '$${newer_version}'.\n" ; \
+	git pull ; \
+	cd - ; \
+	$(MAKE) package-libccc LIBCCC_VERSION=$$newer_version
