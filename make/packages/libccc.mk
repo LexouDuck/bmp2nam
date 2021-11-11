@@ -17,6 +17,16 @@ LIBCCC_LINK = -L$(LIBCCC_LINKDIR) $(LIBCCC_LINKLIB)
 LIBCCC_URL = https://github.com/LexouDuck/libccc
 LIBCCC_URL_VERSION = https://raw.githubusercontent.com/LexouDuck/libccc/master/VERSION
 
+LIBCCC_GITBRANCH = dev
+
+
+
+#! The shell command to retrieve and output list of newer versions, if any
+package_libccc_checkupdates = \
+	curl --silent $(LIBCCC_URL_VERSION) \
+	| cut -d'@' -f 2 \
+	| cut -d'-' -f 1 \
+
 
 
 .PHONY:\
@@ -38,13 +48,14 @@ update-libccc:
 	@echo "=> Current version is: $(LIBCCC_VERSION)"
 	@cd $(LIBCCC_DIR) ; \
 	if git status | grep -q "HEAD detached" ; then \
-		printf $(IO_YELLOW)"WARNING"$(IO_RESET)": Your git submodule "$$i" is in detached HEAD state""\n" ; \
-		printf "You need to manually go into the submodule folder and do 'git checkout master',""\n" ; \
-		printf "after making sure that you have no uncommitted/unpushed local working changes.""\n" ; \
-		exit 1 ; \
-	fi ; \
-	newer_version=`curl $(LIBCCC_URL_VERSION) | cut -d'@' -f 2 | cut -d'-' -f 1` ; \
-	printf "Newest version is '$${newer_version}'.\n" ; \
-	git pull ; \
-	cd - ; \
-	$(MAKE) package-libccc LIBCCC_VERSION=$$newer_version
+		printf $(IO_YELLOW)"WARNING"$(IO_RESET)": Your git submodule "$$i" is in detached HEAD state.\n" ; \
+		printf "You need to manually go into the submodule folder and do 'git checkout $(LIBCCC_GITBRANCH)',\n" ; \
+		printf "after making sure that you have no uncommitted/unpushed local working changes.\n" ; \
+	else \
+		newer_version=`$(call package_libccc_checkupdates)` ; \
+		printf "Newest version is '$${newer_version}'.\n" ; \
+		git fetch ; \
+		git checkout $(LIBCCC_GITBRANCH) ; \
+		cd - ; \
+		$(MAKE) package-libccc LIBCCC_VERSION=$$newer_version ; \
+	fi
