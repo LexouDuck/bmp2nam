@@ -71,7 +71,7 @@ $(OBJDIR)%.o : $(SRCDIR)%.c
 	@mkdir -p $(@D)
 	@printf "Compiling file: "$@" -> "
 	@$(CC) -o $@ $(CFLAGS) -MMD $(INCLUDES) -c $<
-	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
+	@printf $(IO_GREEN)"OK!"$(IO_RESET)"\n"
 
 
 
@@ -79,7 +79,7 @@ $(OBJDIR)%.o : $(SRCDIR)%.c
 $(NAME): $(OBJS)
 	@printf "Compiling program: "$(NAME)" -> "
 	@$(CC) -o $@ $(CFLAGS) $(INCLUDES) $^ $(LDLIBS)
-	@printf $(C_GREEN)"OK!"$(C_RESET)"\n"
+	@printf $(IO_GREEN)"OK!"$(IO_RESET)"\n"
 
 
 

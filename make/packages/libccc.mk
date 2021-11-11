@@ -23,22 +23,22 @@ LIBCCC_URL_VERSION = https://raw.githubusercontent.com/LexouDuck/libccc/master/V
 package-libccc #! prepares the package for building
 package-libccc:
 	@$(call packages_setversion,$(LIBCCC),$(LIBCCC_VERSION))
-	@printf $(C_CYAN)"Downloading package: $(LIBCCC)@$(LIBCCC_VERSION)..."$(C_RESET)"\n"
+	@printf $(IO_CYAN)"Downloading package: $(LIBCCC)@$(LIBCCC_VERSION)..."$(IO_RESET)"\n"
 	@git submodule update --init $(LIBCCC_DIR)
-	@printf $(C_CYAN)"Building package: $(LIBCCC)..."$(C_RESET)"\n"
+	@printf $(IO_CYAN)"Building package: $(LIBCCC)..."$(IO_RESET)"\n"
 	@$(MAKE) -C $(LIBCCC_DIR) build-$(MODE)
-	@printf $(C_GREEN)"SUCCESS!"$(C_RESET)"\n"
+	@printf $(IO_GREEN)"SUCCESS!"$(IO_RESET)"\n"
 
 
 
 .PHONY:\
 update-libccc #! updates the package to the latest version
 update-libccc:
-	@printf $(C_CYAN)"Checking new versions for package: $(LIBCCC)..."$(C_RESET)"\n"
+	@printf $(IO_CYAN)"Checking new versions for package: $(LIBCCC)..."$(IO_RESET)"\n"
 	@echo "=> Current version is: $(LIBCCC_VERSION)"
 	@cd $(LIBCCC_DIR) ; \
 	if git status | grep -q "HEAD detached" ; then \
-		printf $(C_YELLOW)"WARNING"$(C_RESET)": Your git submodule "$$i" is in detached HEAD state""\n" ; \
+		printf $(IO_YELLOW)"WARNING"$(IO_RESET)": Your git submodule "$$i" is in detached HEAD state""\n" ; \
 		printf "You need to manually go into the submodule folder and do 'git checkout master',""\n" ; \
 		printf "after making sure that you have no uncommitted/unpushed local working changes.""\n" ; \
 		exit 1 ; \

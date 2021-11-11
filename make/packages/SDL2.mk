@@ -22,7 +22,7 @@ endif
 LIBSDL_URL = https://www.libsdl.org/release/
 LIBSDL_PKG = SDL2-$(LIBSDL_VERSION).zip
 LIBSDL_PKG_INSTALL = \
-	@printf $(C_YELLOW)"WARNING"$(C_RESET)": Unsupported platform: SDL2 must be configured manually""\n"
+	@printf $(IO_YELLOW)"WARNING"$(IO_RESET)": Unsupported platform: SDL2 must be configured manually""\n"
 
 ifeq ($(OSMODE),other)
 else ifneq ($(filter $(OSMODE), win32 win64),)
@@ -77,19 +77,19 @@ package_SDL2_checkupdates = \
 package-SDL2 #! prepares the package for building
 package-SDL2:
 	@$(call packages_setversion,$(LIBSDL),$(LIBSDL_VERSION))
-	@printf $(C_CYAN)"Downloading package: $(LIBSDL)@$(LIBSDL_VERSION)..."$(C_RESET)"\n"
+	@printf $(IO_CYAN)"Downloading package: $(LIBSDL)@$(LIBSDL_VERSION)..."$(IO_RESET)"\n"
 	@mkdir -p $(LIBSDL_BIN)
 	@curl $(LIBSDL_URL)$(LIBSDL_PKG) --progress-bar --output $(LIBSDL_PKG)
 	@$(LIBSDL_PKG_INSTALL)
 	@rm -f $(LIBSDL_PKG)
-	@printf $(C_GREEN)"SUCCESS!"$(C_RESET)"\n"
+	@printf $(IO_GREEN)"SUCCESS!"$(IO_RESET)"\n"
 
 
 
 .PHONY:\
 update-SDL2 #! updates the package to the latest version
 update-SDL2:
-	@printf $(C_CYAN)"Checking new versions for package: $(LIBSDL)..."$(C_RESET)"\n"
+	@printf $(IO_CYAN)"Checking new versions for package: $(LIBSDL)..."$(IO_RESET)"\n"
 	@echo "=> Current version is: $(LIBSDL_VERSION)"
 	@new_versions=`$(call package_SDL2_checkupdates)` ; \
 	if [ -z "$${new_versions}" ]; then \
