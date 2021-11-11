@@ -3,7 +3,7 @@
 
 
 .PHONY:\
-install # Installs the libraries/programs (copies them from `./bin/` to `/usr/local/`, typically)
+install #! Installs the libraries/programs (copies them from `./bin/` to `/usr/local/`, typically)
 install: $(NAME)
 	@printf $(C_CYAN)"Installing library: $(NAME)..."$(C_RESET)"\n"
 	@mkdir -p $(INSTALLDIR)/bin/
@@ -13,7 +13,7 @@ install: $(NAME)
 
 
 .PHONY:\
-uninstall # Removes the installed libraries/programs (deletes files in `/usr/local/`, typically)
+uninstall #! Removes the installed libraries/programs (deletes files in `/usr/local/`, typically)
 uninstall:
 	@printf $(C_CYAN)"Uninstalling library: $(NAME)..."$(C_RESET)"\n"
 	@rm -f $(INSTALLDIR)/bin/$(NAME)

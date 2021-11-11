@@ -74,7 +74,7 @@ package_SDL2_checkupdates = \
 
 
 .PHONY:\
-package-SDL2 # prepares the package for building
+package-SDL2 #! prepares the package for building
 package-SDL2:
 	@$(call packages_setversion,$(LIBSDL),$(LIBSDL_VERSION))
 	@printf $(C_CYAN)"Downloading package: $(LIBSDL)@$(LIBSDL_VERSION)..."$(C_RESET)"\n"
@@ -87,7 +87,7 @@ package-SDL2:
 
 
 .PHONY:\
-update-SDL2 # updates the package to the latest version
+update-SDL2 #! updates the package to the latest version
 update-SDL2:
 	@printf $(C_CYAN)"Checking new versions for package: $(LIBSDL)..."$(C_RESET)"\n"
 	@echo "=> Current version is: $(LIBSDL_VERSION)"

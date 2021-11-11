@@ -20,7 +20,7 @@ LIBCCC_URL_VERSION = https://raw.githubusercontent.com/LexouDuck/libccc/master/V
 
 
 .PHONY:\
-package-libccc # prepares the package for building
+package-libccc #! prepares the package for building
 package-libccc:
 	@$(call packages_setversion,$(LIBCCC),$(LIBCCC_VERSION))
 	@printf $(C_CYAN)"Downloading package: $(LIBCCC)@$(LIBCCC_VERSION)..."$(C_RESET)"\n"
@@ -32,7 +32,7 @@ package-libccc:
 
 
 .PHONY:\
-update-libccc # updates the package to the latest version
+update-libccc #! updates the package to the latest version
 update-libccc:
 	@printf $(C_CYAN)"Checking new versions for package: $(LIBCCC)..."$(C_RESET)"\n"
 	@echo "=> Current version is: $(LIBCCC_VERSION)"
