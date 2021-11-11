@@ -5,7 +5,7 @@
 LIBCCC = libccc
 LIBCCC_DIR = $(LIBDIR)$(LIBCCC)/
 LIBCCC_BIN = $(LIBCCC_DIR)bin/$(OSMODE)/$(LIBMODE)/
-LIBCCC_VERSION := $(shell cat $(PACKAGESFILE) | grep '^$(LIBCCC)' | cut -d'@' -f 2 | cut -d'-' -f 1)
+LIBCCC_VERSION := $(shell $(call packages_getversion,$(LIBCCC)))
 
 LIBCCC_INCLUDE = $(LIBCCC_DIR)hdr/
 LIBCCC_LINKDIR = $(LIBCCC_BIN)
@@ -17,7 +17,8 @@ LIBCCC_LINK = -L$(LIBCCC_LINKDIR) $(LIBCCC_LINKLIB)
 .PHONY:\
 package-libccc # prepares the package for building
 package-libccc:
-	@printf $(C_CYAN)"Downloading package: $(LIBCCC)..."$(C_RESET)"\n"
+	@$(call packages_setversion,$(LIBCCC),$(LIBCCC_VERSION))
+	@printf $(C_CYAN)"Downloading package: $(LIBCCC)@$(LIBCCC_VERSION)..."$(C_RESET)"\n"
 	@git submodule update --init $(LIBCCC_DIR)
 	@printf $(C_CYAN)"Building package: $(LIBCCC)..."$(C_RESET)"\n"
 	@$(MAKE) -C $(LIBCCC_DIR) build-$(MODE)
@@ -35,9 +36,8 @@ update-libccc:
 		printf $(C_YELLOW)"WARNING"$(C_RESET)": Your git submodule "$$i" is in detached HEAD state""\n" ; \
 		printf "You need to manually go into the submodule folder and do 'git checkout master',""\n" ; \
 		printf "after making sure that you have no uncommitted/unpushed local working changes.""\n" ; \
-	else \
-		git pull ; \
+		exit 1 ; \
 	fi ; \
-	cd -
-	@$(MAKE) version-libccc
+	git pull
+	@#$(call packages_set_version,,) # TODO parse version from libccc version file ?
 	@$(MAKE) package-libccc

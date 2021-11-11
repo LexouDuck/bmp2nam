@@ -5,7 +5,7 @@
 LIBSDL = SDL2
 LIBSDL_DIR = $(LIBDIR)$(LIBSDL)/
 LIBSDL_BIN = $(LIBSDL_DIR)bin/$(OSMODE)/
-LIBSDL_VERSION := $(shell cat $(PACKAGESFILE) | grep '^$(LIBSDL)' | cut -d'@' -f 2 | cut -d'-' -f 1)
+LIBSDL_VERSION := $(shell $(call packages_getversion,$(LIBSDL)))
 
 LIBSDL_INCLUDE = $(LIBSDL_BIN)include/SDL2/
 LIBSDL_LINKDIR = $(LIBSDL_BIN)bin/
@@ -57,10 +57,27 @@ endif
 
 
 
+#! The shell command to retrieve and output list of newer versions, if any
+package_SDL2_checkupdates = \
+	curl --silent $(LIBSDL_URL) \
+	| grep 'SDL2' \
+	| cut -d'"' -f 8 \
+	| $(LIBSDL_GETVERSIONS) \
+	| sort --version-sort \
+	| awk -v found=0 '\
+	{\
+		if (/$(LIBSDL_VERSION)/) { found = 1 }\
+		else if (found) { found += 1; print; }\
+	}' \
+	| sed -E 's/SDL2-.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/g' \
+
+
+
 .PHONY:\
 package-SDL2 # prepares the package for building
 package-SDL2:
-	@printf $(C_CYAN)"Downloading package: $(LIBSDL)..."$(C_RESET)"\n"
+	@$(call packages_setversion,$(LIBSDL),$(LIBSDL_VERSION))
+	@printf $(C_CYAN)"Downloading package: $(LIBSDL)@$(LIBSDL_VERSION)..."$(C_RESET)"\n"
 	@mkdir -p $(LIBSDL_BIN)
 	@curl $(LIBSDL_URL)$(LIBSDL_PKG) --progress-bar --output $(LIBSDL_PKG)
 	@$(LIBSDL_PKG_INSTALL)
@@ -74,16 +91,12 @@ update-SDL2 # updates the package to the latest version
 update-SDL2:
 	@printf $(C_CYAN)"Checking new versions for package: $(LIBSDL)..."$(C_RESET)"\n"
 	@echo "=> Current version is: $(LIBSDL_VERSION)"
-	@curl --silent $(LIBSDL_URL) \
-	| grep 'SDL2' \
-	| cut -d'"' -f 8 \
-	| $(LIBSDL_GETVERSIONS) \
-	| sort --version-sort \
-	| awk -v found=0 '\
-	{\
-		if (/$(LIBSDL_VERSION)/) { found = 1 }\
-		else if (found) { found += 1; print; }\
-	}\
-	END { if (found == 1) print "Newest version already set." }'
-	@#$(MAKE) version-SDL2
-	@#$(MAKE) package-SDL2
+	@new_versions=`$(call package_SDL2_checkupdates)` ; \
+	if [ -z "$${new_versions}" ]; then \
+		printf "Newest version already set.\n" ; \
+	else \
+		newest_version=`echo "$${new_versions}" | tail -1` ; \
+		printf "Found `echo "$${new_versions}" | wc -l | xargs` new versions.\n" ; \
+		printf "Newest version is '$${newest_version}'.\n" ; \
+		$(MAKE) package-SDL2  LIBSDL_VERSION=$$newest_version ; \
+	fi
