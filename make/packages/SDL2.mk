@@ -95,8 +95,8 @@ update-SDL2:
 	if [ -z "$${new_versions}" ]; then \
 		printf "Newest version already set.\n" ; \
 	else \
-		newest_version=`echo "$${new_versions}" | tail -1` ; \
+		newer_version=`echo "$${new_versions}" | tail -1` ; \
 		printf "Found `echo "$${new_versions}" | wc -l | xargs` new versions.\n" ; \
-		printf "Newest version is '$${newest_version}'.\n" ; \
-		$(MAKE) package-SDL2  LIBSDL_VERSION=$$newest_version ; \
+		printf "Newest version is '$${newer_version}'.\n" ; \
+		$(MAKE) package-SDL2  LIBSDL_VERSION=$$newer_version ; \
 	fi

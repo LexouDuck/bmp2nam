@@ -22,7 +22,7 @@ packages_getversion = \
 	| cut -d'@' -f 2 \
 	| cut -d'-' -f 1 \
 
-PACKAGESFILE_TEMP = packages.temp
+
 
 #! The shell command to set a version number in the packages list file
 #	@param 1	The name of the package whose version number should updated
@@ -33,8 +33,8 @@ packages_setversion = \
 	{ \
 		if (/^$(1)/) { print "$(1)@$(2)-?"; } \
 		else { print; } \
-	}' > $(PACKAGESFILE_TEMP) \
-	&& mv $(PACKAGESFILE_TEMP) $(PACKAGESFILE)
+	}'  > packages.temp \
+	&& mv packages.temp $(PACKAGESFILE)
 
 
 
