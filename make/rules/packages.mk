@@ -27,13 +27,13 @@ PACKAGES := $(shell cat $(PACKAGESFILE) | cut -d '@' -f 1)
 
 #! Here, we define necessary variables for each package
 #{
-PACKAGES_VERSIONS = $(addsuffix _VERSION, $(PACKAGES))
-PACKAGES_DIRS     = $(addsuffix _DIR,     $(PACKAGES))
-PACKAGES_BINS     = $(addsuffix _BIN,     $(PACKAGES))
-PACKAGES_INCLUDES = $(addsuffix _INCLUDE, $(PACKAGES))
-PACKAGES_LINKDIRS = $(addsuffix _LINKDIR, $(PACKAGES))
-PACKAGES_LINKLIBS = $(addsuffix _LINKLIB, $(PACKAGES))
-PACKAGES_LINKS    = $(addsuffix _LINK,    $(PACKAGES))
+PACKAGES_VERSIONS = $(foreach i,$(PACKAGES),PACKAGE_$(i)_VERSION)
+PACKAGES_DIRS     = $(foreach i,$(PACKAGES),PACKAGE_$(i)_DIR)
+PACKAGES_BINS     = $(foreach i,$(PACKAGES),PACKAGE_$(i)_BIN)
+PACKAGES_INCLUDES = $(foreach i,$(PACKAGES),PACKAGE_$(i)_INCLUDE)
+PACKAGES_LINKDIRS = $(foreach i,$(PACKAGES),PACKAGE_$(i)_LINKDIR)
+PACKAGES_LINKLIBS = $(foreach i,$(PACKAGES),PACKAGE_$(i)_LINKLIB)
+PACKAGES_LINKS    = $(foreach i,$(PACKAGES),PACKAGE_$(i)_LINK)
 #}
 
 
