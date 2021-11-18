@@ -15,8 +15,8 @@ echo_PACKAGESFILE = $(foreach i,$(wildcard $(PACKAGESDIR)*.mk), echo "$(i:$(PACK
 make_PACKAGESFILE = { $(call echo_PACKAGESFILE) } > $(PACKAGESFILE)
 # if file doesn't exist, create it
 ifeq ($(shell test -f $(PACKAGESFILE) ; echo $$?),1)
-$(warning NOTE: packages list file '$(PACKAGESFILE)' doesn't exist - creating now...)
-$(shell $(call mkdir -p $(PACKAGESDIR)))
+$(shell $(call print_warning,"packages list file '$(PACKAGESFILE)' doesn't exist - creating now..."))
+$(shell mkdir -p $(PACKAGESDIR))
 $(shell $(call make_PACKAGESFILE))
 endif
 #! The raw contents of the packages list file

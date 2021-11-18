@@ -32,22 +32,22 @@ package_libccc_checkupdates = \
 package-libccc #! prepares the package for building
 package-libccc:
 	@$(call packages_setversion,$(PACKAGE_libccc),$(PACKAGE_libccc_VERSION))
-	@printf $(IO_CYAN)"Downloading package: $(PACKAGE_libccc)@$(PACKAGE_libccc_VERSION)..."$(IO_RESET)"\n"
+	@$(call print_message,"Downloading package: $(PACKAGE_libccc)@$(PACKAGE_libccc_VERSION)...")
 	@git submodule update --init $(PACKAGE_libccc_DIR)
-	@printf $(IO_CYAN)"Building package: $(PACKAGE_libccc)..."$(IO_RESET)"\n"
+	@$(call print_message,"Building package: $(PACKAGE_libccc)...")
 	@$(MAKE) -C $(PACKAGE_libccc_DIR) build-$(MODE)
-	@printf $(IO_GREEN)"SUCCESS!"$(IO_RESET)"\n"
+	@$(call print_success,"Installed $(PACKAGE_SDL2)@$(PACKAGE_SDL2_VERSION)")
 
 
 
 .PHONY:\
 update-libccc #! updates the package to the latest version
 update-libccc:
-	@printf $(IO_CYAN)"Checking new versions for package: $(PACKAGE_libccc)..."$(IO_RESET)"\n"
+	@$(call print_message,"Checking new versions for package: $(PACKAGE_libccc)...")
 	@echo "=> Current version is: $(PACKAGE_libccc_VERSION)"
 	@cd $(PACKAGE_libccc_DIR) ; \
 	if git status | grep -q "HEAD detached" ; then \
-		printf $(IO_YELLOW)"WARNING"$(IO_RESET)": Your git submodule "$$i" is in detached HEAD state.\n" ; \
+		$(call print_warning,"Your git submodule "$$i" is in detached HEAD state.") ; \
 		printf "You need to manually go into the submodule folder and do 'git checkout $(PACKAGE_libccc_GITBRANCH)',\n" ; \
 		printf "after making sure that you have no uncommitted/unpushed local working changes.\n" ; \
 	else \
