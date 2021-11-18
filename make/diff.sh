@@ -1,17 +1,20 @@
 #!/bin/sh
 
 # this script is used to compare makefiles
-PROJECT_1=~/Projects/bmp2nam
-PROJECT_2=~/Projects/libccc
+PROJECT_1=~/Projects/libccc
+PROJECT_2=~/Projects/bmp2nam
 FILES='
 	Makefile
 	make/config/build.mk
 	make/config/modes.mk
-	make/config/packages.mk
 	make/lists/packages.txt
 	make/rules/all.mk
 	make/rules/build.mk
 	make/rules/clean.mk
+	make/rules/lint.mk
+	make/rules/lists.mk
+	make/rules/packages.mk
+	make/rules/version.mk
 	make/rules/install.mk
 	make/rules/lint.mk
 	make/rules/prereq.mk

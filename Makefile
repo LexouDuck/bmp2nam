@@ -36,6 +36,10 @@ LIBDIR = ./lib/
 DOCDIR = ./doc/
 #! The directory for testing programs (stores source/header code for the various testing programs)
 TEST_DIR = ./test/
+#! The directory for git hooks scripts
+GITHOOKSDIR = ./.githooks/
+#! The directory for important list files (source files, packages)
+LISTSDIR = ./make/lists/
 
 # generated folders
 
@@ -51,8 +55,6 @@ LOGDIR = ./log/
 LINTDIR = ./lint/
 #! The directory for temporary (can be used for several things - should always be deleted after use)
 TEMPDIR = ./temp/
-#! The directory for git hooks scripts
-GITHOOKSDIR = ./.githooks/
 
 
 
@@ -69,7 +71,6 @@ include make/utils/install.mk
 # project-specific rules
 include make/config/modes.mk
 include make/config/build.mk
-include make/config/packages.mk
 
 
 
@@ -79,6 +80,7 @@ include make/config/packages.mk
 
 # project-specific rules
 include make/rules/all.mk
+include make/rules/lists.mk
 include make/rules/build.mk
 include make/rules/install.mk
 

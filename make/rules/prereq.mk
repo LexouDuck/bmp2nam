@@ -20,7 +20,7 @@ check_prereq = \
 #! The shell command to install a prerequisite program/library (uses the appropriate OS-specific package manager)
 #	@param 1	The name of the program/library/package to install
 install_prereq = \
-	printf $(IO_RED)"ERROR"$(IO_RESET)": Unknown platform. You must manually install: $(1)"
+	printf $(IO_RED)"ERROR"$(IO_RESET)": Unknown platform. You must manually install: $(1)" \
 
 ifeq ($(OS),Windows_NT)
 install_prereq = \
