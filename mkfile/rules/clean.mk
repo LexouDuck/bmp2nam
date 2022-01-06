@@ -3,22 +3,40 @@
 
 
 .PHONY:\
-clean #! Deletes all intermediary build files
-clean:
-	@$(call print_message,"Deleting all .o files...")
-	@rm -f $(OBJS)
-	@$(call print_message,"Deleting all .d files...")
-	@rm -f $(DEPS)
-	@rm -f *.d
+clean #! Deletes any intermediary build files
+clean: \
+	clean-all-obj \
+	clean-all-dep \
 
 
 
 .PHONY:\
-clean-exe #! Deletes any libraries/executables
-clean-exe:
-	@$(call print_message,"Deleting program: "$(NAME)"")
-	@rm -f $(NAME)
-	@rm -f $(NAME).*
+clean-all #! Deletes every generated file
+clean-all: \
+	clean-build \
+	clean-tests \
+
+
+
+.PHONY:\
+clean-all-obj #! Deletes all .o files
+clean-all-obj: \
+	clean-build-obj \
+	clean-tests-obj \
+
+.PHONY:\
+clean-all-dep #! Deletes all .d files
+clean-all-dep: \
+	clean-build-dep \
+	clean-tests-dep \
+
+.PHONY:\
+clean-all-bin #! Deletes any built libraries/executables
+clean-all-bin: \
+	clean-build-bin \
+	clean-tests-bin \
+
+
 
 .PHONY:\
 clean-obj #! Deletes the ./obj folder
@@ -33,19 +51,7 @@ clean-bin:
 	@rm -rf $(BINDIR)
 
 .PHONY:\
-clean-logs #! Deletes the ./log folder
-clean-logs:
+clean-log #! Deletes the ./log folder
+clean-log:
 	@$(call print_message,"Deleting "$(LOGDIR)" folder...")
 	@rm -rf $(LOGDIR)
-
-.PHONY:\
-clean-lint #! Deletes the ./lint folder
-clean-lint:
-	@$(call print_message,"Deleting "$(LINTDIR)" folder...")
-	@rm -rf $(LINTDIR)
-
-
-
-.PHONY:\
-clean-full #! Deletes every generated file
-clean-full: clean clean-exe

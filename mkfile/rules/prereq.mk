@@ -51,67 +51,11 @@ endif
 
 
 .PHONY:\
-prereq #! Checks version numbers for all prerequisite tools
+prereq #! Checks all prerequisite tools/programs and their versions
 prereq: init \
-prereq-build \
-prereq-tests \
-prereq-format \
-prereq-lint
-	@printf $(IO_RESET)"\n\n"
-
-
-
-.PHONY:\
-prereq-build #! Checks prerequisite installs to build the library/program
-prereq-build:
-	@-$(call check_prereq,\
-		(build) C compiler: $(CC),\
-		$(CC) --version,\
-		$(call install_prereq,$(CC)))
-	@-$(call check_prereq,\
-		(build) C archiver: $(AR),\
-		which $(AR),\
-		$(call install_prereq,binutils))
-
-.PHONY:\
-prereq-tests #! Checks prerequisite installs to run the various tests
-prereq-tests:
-ifeq ($(OSMODE),other)
-	@$(call print_warning,"'other' platform: memory leak checking tool must be configured manually")
-else ifeq ($(OSMODE),win32)
-	@-# TODO drmemory.exe ?
-else ifeq ($(OSMODE),win64)
-	@-# TODO drmemory.exe ?
-else ifeq ($(OSMODE),macos)
-	@-$(call check_prereq,\
-		(tests) Xcode leaks checker,\
-		which leaks,\
-		$(call install_prereq,leaks))
-else ifeq ($(OSMODE),linux)
-	@-$(call check_prereq,\
-		(tests) Valgrind,\
-		valgrind --version,\
-		$(call install_prereq,valgrind))
-else
-	@$(call print_warning,"Unsupported platform: memory leak checking tool must be configured manually")
-endif
-
-.PHONY:\
-prereq-format #! Checks prerequisite installs to run the automatic code style formatter
-prereq-format:
-	@-$(call check_prereq,\
-		(format) indent,\
-		which indent,\
-		$(call install_prereq,indent))
-
-.PHONY:\
-prereq-lint #! Checks prerequisite installs to run the linter/static analyzer
-prereq-lint:
-	@-$(call check_prereq,\
-		(lint) cppcheck,\
-		cppcheck --version,\
-		$(call install_prereq,cppcheck))
-	@-$(call check_prereq,\
-		(lint) splint,\
-		splint --help version,\
-		$(call install_prereq,splint))
+	prereq-build \
+	prereq-tests \
+	prereq-coverage \
+	prereq-format \
+	prereq-lint \
+	prereq-doc \
