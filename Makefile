@@ -61,7 +61,7 @@ TEMPDIR = ./temp/
 
 
 #######################################
-#     Included Makefile Variables     #
+#         Included Makefiles          #
 #######################################
 
 # general variables

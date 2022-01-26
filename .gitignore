@@ -1,16 +1,17 @@
 # PROJECT
 
-obj/
-bin/
-dist/
-lint/
+/bmp2nam
+
+/obj/
+/bin/
+/dist/
+/log/
+/ref/
+
 doc/*/*
 doc/html/.doctrees
 log/**/*.log
 log/**/*.txt
-
-/bmp2nam*
-/bmp2nam-test*
 
 test/_test.c
 
@@ -30,6 +31,12 @@ test/_test.c
 .vs/
 ### Visual Studio Code
 .vscode/
+
+
+
+# cccmk
+/.cccmk_diff_*/
+/.cccmk_update/
 
 
 
