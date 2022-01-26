@@ -1,4 +1,4 @@
-./src/bmp2nam_check.c
-./src/bmp2nam_convert.c
-./src/main.c
-./src/util.c
+bmp2nam_check.c
+bmp2nam_convert.c
+main.c
+util.c

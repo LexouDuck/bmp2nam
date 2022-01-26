@@ -10,11 +10,11 @@ DEPS := $(OBJS:.o=.d)
 
 # here we add linked library flags for each package
 LDLIBS := $(LDLIBS) \
-	$(foreach i,$(PACKAGES_LINK),$($(i)))
+	$(foreach i,$(PACKAGES_LINKS),$($(i)))
 
 # here we add include header folders for each package
 INCLUDES := $(INCLUDES) \
-	$(foreach i,$(PACKAGES_INCLUDE),-I$($(i)))
+	$(foreach i,$(PACKAGES_INCLUDES),-I$($(i)))
 
 
 
@@ -44,10 +44,46 @@ $(OBJDIR)%.o : $(SRCDIR)%.c
 #! Compiles the project executable
 $(NAME): $(OBJS)
 	@printf "Compiling program: "$(NAME)" -> "
-	@$(CC) -o $@ $(CFLAGS) $(INCLUDES) $^ $(LDLIBS)
+	@$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS)
 	@printf $(IO_GREEN)"OK!"$(IO_RESET)"\n"
 
 
 
 # The following line is for `.d` dependency file handling
 -include $(DEPS)
+
+
+
+.PHONY:\
+clean-build #! Deletes all intermediary build-related files
+clean-build: \
+clean-build-obj \
+clean-build-dep \
+clean-build-bin \
+
+.PHONY:\
+clean-build-obj #! Deletes all .o build object files
+clean-build-obj:
+	@$(call print_message,"Deleting all build .o files...")
+	@rm -f $(OBJS)
+
+.PHONY:\
+clean-build-dep #! Deletes all .d build dependency files
+clean-build-dep:
+	@$(call print_message,"Deleting all build .d files...")
+	@rm -f $(DEPS)
+
+.PHONY:\
+clean-build-bin #! Deletes all build binaries
+clean-build-bin:
+	@$(call print_message,"Deleting program: $(NAME)")
+	@rm -f $(NAME)
+
+
+
+.PHONY:\
+prereq-build #! Checks prerequisite installs to build the library/program
+prereq-build:
+	@-$(call check_prereq,'(build) C compiler: $(CC)',\
+		$(CC) --version,\
+		$(call install_prereq,$(CC)))
