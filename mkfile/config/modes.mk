@@ -7,7 +7,7 @@ MODES = \
 	debug	\
 	release	\
 # if the MODE variable has no value, give it a default value
-ifeq ($(MODE),)
+ifeq ($(strip $(MODE)),)
 	MODE=debug
 else ifeq ($(MODE),debug)
 else ifeq ($(MODE),release)
@@ -22,25 +22,12 @@ LIBMODES = \
 	static	\
 	dynamic	\
 # if the LIBMODE variable has no value, give it a default value
-ifeq ($(LIBMODE),)
+ifeq ($(strip $(LIBMODE)),)
 	LIBMODE=static
 else ifeq ($(LIBMODE),static)
 else ifeq ($(LIBMODE),dynamic)
 else
 $(error Invalid value for LIBMODE, should be `static` or `dynamic`)
-endif
-
-#! Define build target name for static library with appropriate file extensions
-NAME_STATIC  = $(NAME).$(LIBEXT_STATIC)
-#! Define build target name for dynamic library with appropriate file extensions
-NAME_DYNAMIC = $(NAME).$(LIBEXT_DYNAMIC)
-#! Define build target name for library with appropriate file extension according to LIBMODE
-NAME_LIBMODE = _
-ifeq ($(LIBMODE),static)
-	NAME_LIBMODE = $(NAME_STATIC)
-endif
-ifeq ($(LIBMODE),dynamic)
-	NAME_LIBMODE = $(NAME_DYNAMIC)
 endif
 
 
@@ -52,24 +39,27 @@ OSMODES = \
 	macos	\
 	linux	\
 	other	\
-# if the OSMODE variable has no value, give it a default value
-ifeq ($(OSMODE),)
-	OSMODE=other
+# if the OSMODE variable has no value, give it a default value based on the current platform
+ifeq ($(strip $(OSMODE)),)
+	OSMODE = other
 	ifeq ($(OS),Windows_NT)
 		ifeq ($(PROCESSOR_ARCHITECTURE),x86)
-			OSMODE=win32
+			OSMODE = win32
 		endif
 		ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-			OSMODE=win64
+			OSMODE = win64
 		endif
 	else
-		UNAME_S = $(shell uname -s)
+		UNAME_S := $(shell uname -s)
 		ifeq ($(UNAME_S),Linux)
-			OSMODE=linux
+			OSMODE = linux
 		endif
 		ifeq ($(UNAME_S),Darwin)
-			OSMODE=macos
+			OSMODE = macos
 		endif
+	endif
+	ifeq ($(OSMODE),other)
+	_:=$(call print_warning,"Could not estimate the current target platform, defaulting to 'OSMODE = other'...")
 	endif
 endif
 
