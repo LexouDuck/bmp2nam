@@ -3,7 +3,7 @@
 #include <libccc/memory.h>
 #include <libccc/string.h>
 #include <libccc/sys/logger.h>
-#include <libccc/math/math.h>
+#include <libccc/math.h>
 #include <libccc/math/sort.h>
 
 #include "SDL.h"

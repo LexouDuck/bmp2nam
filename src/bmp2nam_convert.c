@@ -1,9 +1,9 @@
 
 #include <libccc.h>
-#include <libccc/color.h>
 #include <libccc/memory.h>
 #include <libccc/string.h>
 #include <libccc/sys/logger.h>
+#include <libccc/image/color.h>
 
 #include "SDL.h"
 

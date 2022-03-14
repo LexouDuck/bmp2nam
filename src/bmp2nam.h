@@ -27,9 +27,9 @@
 */
 
 #include <libccc.h>
-#include <libccc/color.h>
 #include <libccc/sys/logger.h>
 #include <libccc/math/sort.h>
+#include <libccc/image/color.h>
 
 #include "SDL.h"
 

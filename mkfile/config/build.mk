@@ -16,7 +16,6 @@ CC_OS_OTHER = cc
 
 #! GNU conventional variable: C compiler options
 CFLAGS = \
-	-Werror \
 	-Wall \
 	-Wextra \
 	-Winline \
