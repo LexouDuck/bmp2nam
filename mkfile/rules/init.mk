@@ -6,7 +6,11 @@
 init #! Performs initial project setup (should be executed once, after cloning the repo)
 init:
 	@$(call print_message,"Setting up project...")
-	@git submodule update --init --recursive
-	@git config core.hooksPath $(GITHOOKSDIR)
+	@mkdir -p $(LIBDIR)
+	@mkdir -p $(GITHOOKSDIR)
+	@mkdir -p $(LISTSDIR)
+	@$(GIT) submodule update --init --recursive
+	@$(GIT) config submodule.recurse true
+	@$(GIT) config core.hooksPath $(GITHOOKSDIR)
 
 # TODO 'configure' rule, for easier cross-platform setup ?

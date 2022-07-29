@@ -10,6 +10,7 @@
 /obj/
 /bin/
 /dist/
+/build/
 
 # Testing
 /coverage/
@@ -30,10 +31,58 @@ log.txt
 
 
 ###
-### OS-specific files
+### Language: C
 ###
 
-# Windows
+# C intermediary build files
+*.d
+*.o
+*.ko
+*.obj
+*.elf
+*.ilk
+*.map
+*.exp
+*.gch
+*.pch
+# Libraries (static)
+*.a
+*.la
+*.lo
+*.lib
+# Libraries (dynamic)
+*.def
+*.dll
+*.so
+*.so.*
+*.dylib
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+*.stackdump
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+
+
+###
+### OS-specific files
+###
 
 # Linux
 
@@ -41,8 +90,14 @@ log.txt
 .DS-Store
 .DS_Store
 
+# Windows
+Thumbs.db
+desktop.ini
+
 # FAT32
 .Trash-[0-9]*
+.trashes
+.spotlight-v[0-9]*
 
 
 

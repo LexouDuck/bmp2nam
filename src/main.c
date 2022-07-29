@@ -54,14 +54,14 @@ t_bool HandleArg_Palette(t_char const* arg)
 	t_fd fd = IO_Open(arg, OPEN_READONLY, 0);
 	if (fd < 0)
 	{
-		Log_Error_IO(&program.logger, 0, "Could not open user-specified palette file: %s", arg);
+		Log_Error_STD(&program.logger, 0, "Could not open user-specified palette file: %s", arg);
 		return (ERROR);
 	}
 	t_u8* file = NULL;
 	t_sintmax size = IO_Read_File(fd, (void**)&file, 0);
 	if (size < 0)
 	{
-		Log_Error_IO(&program.logger, 0, "Could not read user-specified palette file: %s", arg);
+		Log_Error_STD(&program.logger, 0, "Could not read user-specified palette file: %s", arg);
 		return (ERROR);
 	}
 	if ((t_size)size != PAL_SIZE)
@@ -417,7 +417,7 @@ int main(int argc, t_char** argv)
 			return (ERROR);
 	}
 
-	tmp = String_Join(program.file_output, ".bmp");
+	tmp = String_Concat(program.file_output, ".bmp");
 	if (SDL_SaveBMP(program.bitmap, tmp))
 	{
 		String_Delete(&tmp);
@@ -427,7 +427,7 @@ int main(int argc, t_char** argv)
 	Log_Success(&program.logger, "Wrote output file: %s", tmp);
 	String_Delete(&tmp);
 
-	tmp = String_Join(program.file_output, ".nam");
+	tmp = String_Concat(program.file_output, ".nam");
 	// TODO code here
 	String_Delete(&tmp);
 	return (OK);

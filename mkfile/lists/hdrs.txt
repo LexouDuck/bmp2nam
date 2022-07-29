@@ -1,1 +1,1 @@
-bmp2nam.h
+./src/bmp2nam.h

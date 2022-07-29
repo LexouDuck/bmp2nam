@@ -26,14 +26,14 @@ int     CheckBitmap_LoadReferencePalette(void)
 	t_fd fd = IO_Open(REFPAL_FILEPATH, OPEN_READONLY, 0);
 	if (fd < 0)
 	{
-		Log_Error_IO(&program.logger, 0, "Could not open reference palette file: %s", REFPAL_FILEPATH);
+		Log_Error_STD(&program.logger, 0, "Could not open reference palette file: %s", REFPAL_FILEPATH);
 		return (ERROR);
 	}
 	t_u8* file = NULL;
 	t_sintmax size = IO_Read_File(fd, (void**)&file, 0);
 	if (size < 0)
 	{
-		Log_Error_IO(&program.logger, 0, "Could not read reference palette file: %s", REFPAL_FILEPATH);
+		Log_Error_STD(&program.logger, 0, "Could not read reference palette file: %s", REFPAL_FILEPATH);
 		return (ERROR);
 	}
 	if ((t_size)size != REFPAL_SIZE)

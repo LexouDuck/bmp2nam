@@ -3,16 +3,16 @@
 
 
 #! Define all possible build modes
-MODES = \
+BUILDMODES = \
 	debug	\
 	release	\
-# if the MODE variable has no value, give it a default value
-ifeq ($(strip $(MODE)),)
-	MODE=debug
-else ifeq ($(MODE),debug)
-else ifeq ($(MODE),release)
+# if the BUILDMODE variable has no value, give it a default value
+ifeq ($(strip $(BUILDMODE)),)
+	BUILDMODE=debug
 else
-$(error Invalid value for MODE, should be `debug` or `release`)
+	ifeq ($(filter $(BUILDMODE), $(BUILDMODES)),)
+	$(error Invalid value for BUILDMODE, should be `debug` or `release`)
+	endif
 endif
 
 
@@ -24,38 +24,37 @@ LIBMODES = \
 # if the LIBMODE variable has no value, give it a default value
 ifeq ($(strip $(LIBMODE)),)
 	LIBMODE=static
-else ifeq ($(LIBMODE),static)
-else ifeq ($(LIBMODE),dynamic)
 else
-$(error Invalid value for LIBMODE, should be `static` or `dynamic`)
+	ifeq ($(filter $(LIBMODE), $(LIBMODES)),)
+	$(error Invalid value for LIBMODE, should be `static` or `dynamic`)
+	endif
 endif
 
 
 
-#! Define all possible supported platforms
+UNAME_S := $(shell uname -s)
+UNAME_M := $(shell uname -m)
+UNAME_P := $(shell uname -p)
+
+
+
+#! Define all possible supported target platforms/operating systems
 OSMODES = \
-	win32	\
-	win64	\
+	windows	\
 	macos	\
 	linux	\
 	other	\
 # if the OSMODE variable has no value, give it a default value based on the current platform
 ifeq ($(strip $(OSMODE)),)
-	OSMODE = other
+	OSMODE := other
 	ifeq ($(OS),Windows_NT)
-		ifeq ($(PROCESSOR_ARCHITECTURE),x86)
-			OSMODE = win32
-		endif
-		ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-			OSMODE = win64
-		endif
+		OSMODE := windows
 	else
-		UNAME_S := $(shell uname -s)
 		ifeq ($(UNAME_S),Linux)
-			OSMODE = linux
+			OSMODE := linux
 		endif
 		ifeq ($(UNAME_S),Darwin)
-			OSMODE = macos
+			OSMODE := macos
 		endif
 	endif
 	ifeq ($(OSMODE),other)
@@ -65,21 +64,39 @@ endif
 
 
 
+#! Since it is not viable to have/maintain make an exhaustive list of all possible target ASM/CPU architectures, instead we simply use the result of `uname -m`)
+CPUMODES = \
+	other	\
+# if the CPUMODE variable has no value, give it a default value based on the current CPU architecture
+ifeq ($(strip $(CPUMODE)),)
+	CPUMODE := other
+	ifdef __EMSCRIPTEN__
+		CPUMODE := wasm-$(if $(findstring 64, $(UNAME_M) $(UNAME_P)),64,32)
+	else
+		CPUMODE := $(subst _,-,$(subst $(C_SPACE),-,$(UNAME_M)))
+	endif
+	ifeq ($(strip $(CPUMODE)),)
+	_:=$(call print_warning,"Could not estimate the current target CPU architecture, defaulting to 'CPUMODE = other'...")
+	CPUMODE := other
+	endif
+endif
+
+
+
 #! The file extension used for static library files
-LIBEXT_STATIC=a
+LIBEXT_static := a
 
 #! The file extension used for dynamic library files
-LIBEXT_DYNAMIC=
+LIBEXT_dynamic := 
+ifeq ($(OSMODE),windows)
+	LIBEXT_dynamic := dll
+endif
+ifeq ($(OSMODE),linux)
+	LIBEXT_dynamic := so
+endif
+ifeq ($(OSMODE),macos)
+	LIBEXT_dynamic := dylib
+endif
 ifeq ($(OSMODE),other)
-	LIBEXT_DYNAMIC=
-else ifeq ($(OSMODE),win32)
-	LIBEXT_DYNAMIC=dll
-else ifeq ($(OSMODE),win64)
-	LIBEXT_DYNAMIC=dll
-else ifeq ($(OSMODE),linux)
-	LIBEXT_DYNAMIC=so
-else ifeq ($(OSMODE),macos)
-	LIBEXT_DYNAMIC=dylib
-else
-$(error Unsupported platform: you must configure the dynamic library file extension your machine uses)
+$(warning Unsupported platform: you must configure the dynamic library file extension your machine uses)
 endif

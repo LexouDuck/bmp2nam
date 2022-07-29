@@ -1,17 +1,18 @@
-#! This file holds rules to install/uninstall a C program in the appropriate location
+#! This file holds rules to install/uninstall a program in the appropriate location
 
 
 
 .PHONY:\
 install #! Installs the program (copies files from `./bin/` to `/usr/local/`)
-install: $(NAME)
+install: \
+$(BINPATH)$(NAME)
 	@$(call print_message,"Installing program: $(NAME)...")
 	@$(SUDO) mkdir -p $(INSTALLDIR)/bin/
 ifeq ($(INSTALL_SYMLINK),)
-	@$(SUDO) $(INSTALL_PROGRAM) $(NAME) \
+	@$(SUDO) $(INSTALL_PROGRAM) $(BINPATH)$(NAME) \
 		$(INSTALLDIR)/bin/$(NAME)
 else
-	@$(SUDO) $(INSTALL_PROGRAM) $(NAME) \
+	@$(SUDO) $(INSTALL_PROGRAM) $(BINPATH)$(NAME) \
 		$(INSTALLDIR)/bin/$(NAME)-$(VERSION)
 	@$(SUDO) ln -sf \
 		$(INSTALLDIR)/bin/$(NAME)-$(VERSION) \

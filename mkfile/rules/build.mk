@@ -2,11 +2,16 @@
 
 
 
+objs = ` cat "$(OBJSFILE)" | tr '\n' ' ' `
+
+#! Path of the file which stores the list of compiled object files
+OBJSFILE = $(OBJPATH)objs.txt
+
 #! Derive list of compiled object files (.o) from list of srcs
-OBJS := $(SRCS:%.c=$(OBJDIR)%.o)
+OBJS := $(SRCS:$(SRCDIR)%.c=$(OBJPATH)%.o)
 
 #! Derive list of dependency files (.d) from list of srcs
-DEPS := $(OBJS:.o=.d)
+DEPS := $(OBJS:%.o=%.d)
 
 # here we add dependency library linking flags for each package
 LDLIBS := $(LDLIBS) \
@@ -16,24 +21,51 @@ LDLIBS := $(LDLIBS) \
 INCLUDES := $(INCLUDES) \
 	$(foreach i,$(PACKAGES), -I$(PACKAGE_$(i)_INCLUDE))
 
+#! Shell command used to copy over dependency libraries from ./lib into ./bin
+#! @param	$(1)	The subdirectory within the ./bin target folder
+bin_copylibs = \
+	mkdir -p $(BINPATH)$(1) ; \
+	$(foreach i,$(PACKAGES), \
+		for i in $(PACKAGE_$(i)_LINKDIR)* ; do \
+			cp -Rp "$$i" $(BINPATH)$(1) || $(call print_warning,"No library files to copy from $(PACKAGE_$(i)_LINKDIR)*") ; \
+		done ; )
 
+#! Shell command used to create symbolic links for version-named library binary
+#! @param $(1)	path of the binary file (folder, relative to root-level Makefile)
+#! @param $(2)	name of the binary file (without version number, and without file extension)
+#! @param $(3)	file extension of the binary file
+bin_symlinks = \
+	cd $(1) \
+
+
+
+.PHONY:\
+build #! Builds the program, with the default BUILDMODE (typically debug)
+build: \
+$(BINPATH)$(NAME)
 
 .PHONY:\
 build-debug #! Builds the program, in 'debug' mode (with debug flags and symbol-info)
-build-debug: MODE = debug
-build-debug: CFLAGS += $(CFLAGS_DEBUG)
-build-debug: $(NAME)
+build-debug:
+	@$(MAKE) build BUILDMODE=debug
 
 .PHONY:\
 build-release #! Builds the program, in 'release' mode (with optimization flags)
-build-release: MODE = release
-build-release: CFLAGS += $(CFLAGS_RELEASE)
-build-release: $(NAME)
+build-release:
+	@$(MAKE) build BUILDMODE=release
+
+
+
+#! Generates the list of object files
+$(OBJSFILE): $(SRCSFILE)
+	@mkdir -p $(@D)
+	@printf "" > $(OBJSFILE)
+	$(foreach i,$(OBJS),	@printf "$(i)\n" >> $(OBJSFILE) $(C_NL))
 
 
 
 #! Compiles object files from source files
-$(OBJDIR)%.o : $(SRCDIR)%.c
+$(OBJPATH)%.o : $(SRCDIR)%.c
 	@mkdir -p $(@D)
 	@printf "Compiling file: $@ -> "
 	@$(CC) -o $@ $(CFLAGS) -MMD $(INCLUDES) -c $<
@@ -42,16 +74,14 @@ $(OBJDIR)%.o : $(SRCDIR)%.c
 
 
 #! Compiles the project executable
-$(NAME): $(OBJS)
+$(BINPATH)$(NAME): $(OBJSFILE) $(OBJS)
+	@rm -f $@
+	@mkdir -p $(@D)
 	@printf "Compiling program: $@ -> "
 	@$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS)
 	@printf $(IO_GREEN)"OK!"$(IO_RESET)"\n"
-	@mkdir -p $(BINDIR)$(OSMODE)/
-	@cp -p $@ $(BINDIR)$(OSMODE)/
-	@$(foreach i,$(PACKAGES), \
-		if [ "$(PACKAGE_$(i)_LIBMODE)" = "dynamic" ] ; then \
-			cp -rp $(PACKAGE_$(i)_LINKDIR)* $(BINDIR)$(OSMODE)/ ; \
-		fi ; )
+	@$(call bin_copylibs)
+	@$(call bin_symlinks,$(BINPATH),$(NAME),)
 
 
 
@@ -64,7 +94,9 @@ $(NAME): $(OBJS)
 mkdir-build #! Creates all the build folders in the ./bin folder (according to `OSMODES`)
 mkdir-build:
 	@$(call print_message,"Creating build folders...")
-	@$(foreach i,$(OSMODES), mkdir -p $(BINDIR)$(i) ; )
+	$(foreach i,$(BUILDMODES),\
+	$(foreach os,$(OSMODES),\
+	$(foreach cpu,$(CPUMODES),	@mkdir -p $(BINDIR)$(i)_$(os)_$(cpu)$(C_NL))))
 
 
 
@@ -73,37 +105,38 @@ clean-build #! Deletes all intermediary build-related files
 clean-build: \
 clean-build-obj \
 clean-build-dep \
-clean-build-exe \
 clean-build-bin \
+clean-build-exe \
 
 .PHONY:\
 clean-build-obj #! Deletes all .o build object files
 clean-build-obj:
 	@$(call print_message,"Deleting all build .o files...")
-	@rm -f $(OBJS)
+	$(foreach i,$(OBJS),	@rm -f "$(i)" $(C_NL))
 
 .PHONY:\
 clean-build-dep #! Deletes all .d build dependency files
 clean-build-dep:
 	@$(call print_message,"Deleting all build .d files...")
-	@rm -f $(DEPS)
+	$(foreach i,$(DEPS),	@rm -f "$(i)" $(C_NL))
 
 .PHONY:\
 clean-build-exe #! Deletes the built program in the root project folder
 clean-build-exe:
-	@$(call print_message,"Deleting program: $(NAME)")
+	@$(call print_message,"Deleting program: $(BINPATH)$(NAME)")
+	@rm -f $(BINPATH)$(NAME)
 	@rm -f $(NAME)
 
 .PHONY:\
 clean-build-bin #! Deletes all build binaries in the ./bin folder
 clean-build-bin:
-	@$(call print_message,"Deleting builds in '$(BINDIR)$(OSMODE)'...")
-	@rm -f $(BINDIR)$(OSMODE)/*
+	@$(call print_message,"Deleting builds in '$(BINPATH)'...")
+	@rm -f $(BINPATH)*
 
 
 
 .PHONY:\
-prereq-build #! Checks prerequisite installs to build the program
+prereq-build #! Checks prerequisite installed tools to build a program
 prereq-build:
 	@-$(call check_prereq,'(build) C compiler: $(CC)',\
 		$(CC) --version,\

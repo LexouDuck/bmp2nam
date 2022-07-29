@@ -8,6 +8,8 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 #! The directory of the root-level makefile
 CURRENT_DIR := $(patsubst %/,%,$(dir $(MKFILE_PATH)))
+#! The sub-directory in which makefile scripts are stored
+MKFILES_DIR := ./mkfile/
 
 
 
@@ -24,13 +26,10 @@ NAME = bmp2nam
 #      Project folder structure       #
 #######################################
 
-#! The sub-directory in which makefile scripts are stored
-MKFILES_DIR := ./mkfile/
-
 # repository folders
 
 #! The directory for header code files (stores `.h` files)
-HDRDIR = ./hdr/
+HDRDIR = ./src/
 #! The directory for source code files (stores `.c` files)
 SRCDIR = ./src/
 #! The directory for dependency library files (stores libs - static:`.a` or dynamic:`.dll`/`.dylib`/`.so`)
@@ -42,19 +41,24 @@ LISTSDIR = $(MKFILES_DIR)lists/
 
 # generated folders
 
-#! The directory for object assembly files (stores `.o` files)
+#! The name of the subfolder for the current compilation target
+TARGETDIR = $(BUILDMODE)_$(OSMODE)_$(CPUMODE)
+
+#! The directory for compiled object files (stores `.o` and `.d` files)
 OBJDIR = ./obj/
+OBJPATH = $(OBJDIR)$(TARGETDIR)/
 #! The directory for built binary files (stores programs/libraries built by this project)
 BINDIR = ./bin/
+BINPATH = $(BINDIR)$(TARGETDIR)/
+#! The directory for output logs (stores `.txt` outputs of the test suite program)
+LOGDIR = ./log/
+LOGPATH = $(LOGDIR)$(TARGETDIR)/
 #! The directory for distribution archives (stores `.zip` distributable builds)
 DISTDIR = ./dist/
 #! The directory for temporary (can be used for several things - should always be deleted after use)
 TEMPDIR = ./temp/
-#! The directory for output logs (stores `.txt` outputs of the test suite program)
-LOGDIR = ./log/
 #! The directory for linter/static analyzer output logs (stores warnings logs)
 LINTDIR = $(LOGDIR)lint/
-
 
 
 
@@ -74,6 +78,14 @@ include $(MKFILES_DIR)utils/ext.mk
 include $(MKFILES_DIR)config/modes.mk
 include $(MKFILES_DIR)config/build.mk
 include $(MKFILES_DIR)config/install.mk
+
+
+
+# parse any .env files, to override variables
+ifneq ($(wildcard .env),)
+$(shell $(call print_message,"Sourcing local '.env' file..."))
+$(shell sh ./.env)
+endif
 
 
 
