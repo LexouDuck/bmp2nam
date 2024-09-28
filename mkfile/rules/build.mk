@@ -64,11 +64,11 @@ $(OBJSFILE): $(SRCSFILE)
 
 
 
-#! Compiles object files from source files
+#! Compiles object files from C source files
 $(OBJPATH)%.o : $(SRCDIR)%.c
 	@mkdir -p $(@D)
 	@printf "Compiling file: $@ -> "
-	@$(CC) -o $@ $(CFLAGS) -MMD $(INCLUDES) -c $<
+	@$(CC) -o $@ $(CFLAGS) $(CPPFLAGS) -MMD $(INCLUDES) -c $<
 	@printf $(IO_GREEN)"OK!"$(IO_RESET)"\n"
 
 
@@ -78,7 +78,7 @@ $(BINPATH)$(NAME): $(OBJSFILE) $(OBJS)
 	@rm -f $@
 	@mkdir -p $(@D)
 	@printf "Compiling program: $@ -> "
-	@$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS)
+	@$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(call objs) $(LDLIBS)
 	@printf $(IO_GREEN)"OK!"$(IO_RESET)"\n"
 	@$(call bin_copylibs)
 	@$(call bin_symlinks,$(BINPATH),$(NAME),)
@@ -109,29 +109,29 @@ clean-build-bin \
 clean-build-exe \
 
 .PHONY:\
-clean-build-obj #! Deletes all .o build object files
+clean-build-obj #! Deletes all .o build object files, for the current TARGETDIR
 clean-build-obj:
-	@$(call print_message,"Deleting all build .o files...")
+	@$(call print_message,"Deleting all .o files for target $(TARGETDIR)...")
 	$(foreach i,$(OBJS),	@rm -f "$(i)" $(C_NL))
 
 .PHONY:\
-clean-build-dep #! Deletes all .d build dependency files
+clean-build-dep #! Deletes all .d build dependency files, for the current TARGETDIR
 clean-build-dep:
-	@$(call print_message,"Deleting all build .d files...")
+	@$(call print_message,"Deleting all .d files for target $(TARGETDIR)...")
 	$(foreach i,$(DEPS),	@rm -f "$(i)" $(C_NL))
 
 .PHONY:\
-clean-build-exe #! Deletes the built program in the root project folder
+clean-build-bin #! Deletes all build binaries, for the current TARGETDIR
+clean-build-bin:
+	@$(call print_message,"Deleting binaries in '$(BINPATH)'...")
+	@rm -f $(BINPATH)*
+
+.PHONY:\
+clean-build-exe #! Deletes the built program, for the current TARGETDIR
 clean-build-exe:
 	@$(call print_message,"Deleting program: $(BINPATH)$(NAME)")
 	@rm -f $(BINPATH)$(NAME)
 	@rm -f $(NAME)
-
-.PHONY:\
-clean-build-bin #! Deletes all build binaries in the ./bin folder
-clean-build-bin:
-	@$(call print_message,"Deleting builds in '$(BINPATH)'...")
-	@rm -f $(BINPATH)*
 
 
 

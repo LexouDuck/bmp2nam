@@ -23,6 +23,7 @@ CFLAGS = \
 	-Wmissing-prototypes \
 	-Wold-style-definition \
 	-fstrict-aliasing \
+	-std=c11 \
 	$(CFLAGS_BUILDMODE) \
 	$(CFLAGS_OS) \
 	$(CFLAGS_EXTRA)
@@ -65,7 +66,8 @@ CFLAGS_EXTRA += \
 	-Wno-c99-extensions \
 	-Wno-c++11-extensions \
 	-Wno-c++17-extensions \
-	-Wno-return-type-c-linkage
+	-Wno-return-type-c-linkage \
+
 endif
 
 
